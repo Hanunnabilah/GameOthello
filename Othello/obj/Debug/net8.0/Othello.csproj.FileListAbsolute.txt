@@ -1,0 +1,4 @@
+/Users/hanun/Documents/GameOthello/Othello/obj/Debug/net8.0/Othello.GeneratedMSBuildEditorConfig.editorconfig
+/Users/hanun/Documents/GameOthello/Othello/obj/Debug/net8.0/Othello.AssemblyInfoInputs.cache
+/Users/hanun/Documents/GameOthello/Othello/obj/Debug/net8.0/Othello.AssemblyInfo.cs
+/Users/hanun/Documents/GameOthello/Othello/obj/Debug/net8.0/Othello.csproj.CoreCompileInputs.cache
