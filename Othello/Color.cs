@@ -1,4 +1,4 @@
-namespace ColorDisc;
+namespace ColorDiscs;
 
 public enum Color
 {
