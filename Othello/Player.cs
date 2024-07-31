@@ -1,17 +1,15 @@
 namespace Player;
 public class IPlayer
 {
-    internal int MaxPlayer;
-
     public int IdPlayer {get;}
     public string Username {get;}
 }
 public class Player{
-    public int id {get; private set;}
+    public int Id {get; private set;}
     public string Username {get; private set;}
-    public Player(int IdPlayer, string Username) 
+    public Player(int idPlayer, string username) 
     {
-        this.id = IdPlayer;
-        this.Username = Username;
+        this.Id = idPlayer;
+        this.Username = username;
     }
 }
