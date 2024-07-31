@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/Users/hanun/Documents/GameOthello/Othello/Othello.csproj": {}
+    "C:\\Users\\Batch 11\\Documents\\Othello\\GameOthello\\Othello\\Othello.csproj": {}
   },
   "projects": {
-    "/Users/hanun/Documents/GameOthello/Othello/Othello.csproj": {
+    "C:\\Users\\Batch 11\\Documents\\Othello\\GameOthello\\Othello\\Othello.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/hanun/Documents/GameOthello/Othello/Othello.csproj",
+        "projectUniqueName": "C:\\Users\\Batch 11\\Documents\\Othello\\GameOthello\\Othello\\Othello.csproj",
         "projectName": "Othello",
-        "projectPath": "/Users/hanun/Documents/GameOthello/Othello/Othello.csproj",
-        "packagesPath": "/Users/hanun/.nuget/packages/",
-        "outputPath": "/Users/hanun/Documents/GameOthello/Othello/obj/",
+        "projectPath": "C:\\Users\\Batch 11\\Documents\\Othello\\GameOthello\\Othello\\Othello.csproj",
+        "packagesPath": "C:\\Users\\Batch 11\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Batch 11\\Documents\\Othello\\GameOthello\\Othello\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/hanun/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\Batch 11\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -58,7 +58,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.302/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.302/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
