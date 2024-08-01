@@ -4,6 +4,7 @@ using Board;
 using Discs;
 using Player;
 using PositionBoard;
+using InterfaceDisc;
 using ColorDiscs = ColorDiscs.Color ;
 
 public class GameController

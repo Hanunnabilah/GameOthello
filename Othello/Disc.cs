@@ -1,17 +1,8 @@
 using ColorDiscs;
+using InterfaceDisc;
 
 namespace Discs;
 
-public interface IDisc
-{
-	public int IdDisc{get;}
-	public Color color;
-	public bool placed;
-	public void SetColor(Color color) {}
-	public void Disc(int IdDisc, Color color) {}
-	public bool IsPlace();
-	public void Place();
-}
 public class Disc : IDisc
 {
 	public int IdDisc{get; private set;}
@@ -32,6 +23,6 @@ public class Disc : IDisc
 	}
 	public void Place()
 	{
-		
+		_placed = true;
 	}
 }
