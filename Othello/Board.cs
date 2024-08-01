@@ -3,56 +3,62 @@ using Discs;
 using Player;
 using ColorDiscs;
 using InterfaceDisc;
-using GameResult;
 using System.Security.Cryptography.X509Certificates;
+using System.Runtime.CompilerServices;
 namespace Board;
 
 public class Board
 {
-	private Disc[,] discs = new Disc[8,8];
+	private Disc[,] _discs = new Disc[8,8];
 	public void InitializeBoard()
 	{
 		// set position in center board
-        int mid = discs.GetLength(0) / 2;
+		int mid = _discs.GetLength(0) / 2;
 
-        for (int x = 0; x < discs.GetLength(0); x++)
-        {
-            for(int y = 0; y < discs.GetLength(1); y++)
-            {
-                discs[x, y] = null;
-            }
-        }
-        // set 4 discs for first place on board
-		discs[mid - 1, mid - 1] = new Disc(1, Color.White);
-		discs[mid - 1,mid] = new Disc(2, Color.Black);
-		discs[mid,mid - 1] = new Disc(3, Color.Black);
-		discs[mid,mid] = new Disc(4, Color.White);
+		// set 4 discs for first place on board
+		_discs[mid - 1, mid - 1] = new Disc(1, Color.White);
+		_discs[mid - 1,mid] = new Disc(2, Color.Black);
+		_discs[mid,mid - 1] = new Disc(3, Color.Black);
+		_discs[mid,mid] = new Disc(4, Color.White);
 	}
 	public void GetBoard()
 	{
-        InitializeBoard();
-        
+		_discs = new Disc[_discs.GetLength(0), _discs.GetLength(1)];
+		
+		for(int x = 0; x < _discs.GetLength(0); x++)
+		{
+			for(int y = 0; y < _discs.GetLength(1); y++)
+			{
+				_discs[x,y] = _discs[x,y];
+			}
+		}
 	}
 	public void CheckPlayer(Position position, IDisc dics)
 	{
-		
+		// check disc on board
+		if(position.x < 0 || position.x >= _discs.GetLength(0) || position.y < 0 || position.y >= _discs.GetLength(1))
+		{
+			return;	
+		}
+		// position is filled?
+		if(_discs is not null)
+		{
+			return;
+		}
 	}
 	public IDisc GetDisc(Position position)
 	{
-		
+		// return discs based on position
+		return _discs[position.x, position.y];
 	}
 	public bool IsFull()
 	{
-		for (int x = 0; x < discs.GetLength(0); x++)
-        {
-            for(int y = 0; y < discs.GetLength(1); y++)
-            {
-				// if any disc is null 
-				if(discs[x, y] == null)
-				{
-					return false;
-				}
-			}
+		foreach(Disc disc in _discs)
+		{
+			if(disc is null)
+			{
+				return false;
+			} 		
 		}
 		return true;
 	}
@@ -62,26 +68,71 @@ public class Board
 		// check if board is full
 		int blackCount = 0;
 		int whiteCount = 0;
-
-		if(discs[x, y].color is Color.Black)
-		{
-			blackCount++;
-		}
-		else if(discs[x, y].color = Color.White)
-		{
-			whiteCount++;
-		}
-		if(blackCount > whiteCount)
-		{
-			return GameResult.BlackWins;
-		}
-		else if(whiteCount > blackCount)
-		{
-			return GameResult.WhiteWins;
-		}
-	}
-	public IPlayer GetWinner(Dictionary<IPlayer, Disc> _playerColors, IPlayer player1, IPlayer player2)
-	{
 		
-    }
+		foreach(Disc disc in _discs)
+		{
+			if(disc is not null)
+			{
+				if(disc.color is Color.Black)
+				{
+					blackCount++;
+				}
+				else if(disc.color is Color.White)
+				{
+					whiteCount++;
+				}
+			}
+			if(blackCount > whiteCount)
+			{
+				return true;
+			}
+			else if(blackCount < whiteCount)
+			{
+				return true;
+			}
+			return false;
+		}
+		return false;
+	}
+	public IPlayer GetWinner (Dictionary<IPlayer, Disc> _playerColors, IPlayer player1, IPlayer player2)
+	{
+		int blackCount = 0;
+		int whiteCount = 0;
+		
+		foreach(Disc disc in _discs)
+		{
+			if(disc is not null)
+			{
+				if(disc.color is Color.Black)
+				{
+					blackCount++;
+				}
+				else if(disc.color is Color.White)
+				{
+					whiteCount++;
+				}
+			}
+			if(blackCount > whiteCount)
+			{
+				foreach(var playerColor in _playerColors)
+				{
+					if(playerColor.Value.color is Color.Black)
+					{
+						return playerColor.Key;
+					}
+				}
+			}
+			else if(blackCount < whiteCount)
+			{
+				foreach(var playerColor in _playerColors)
+				{
+					if(playerColor.Value.color is Color.White)
+					{
+						return playerColor.Key;
+					}
+				}
+			}
+		}
+		return null;
+	}
 }
