@@ -14,8 +14,8 @@ public class GameController
 	private int _MaxPlayer;
 	private Board _board;
 	private Dictionary<IPlayer, Disc> _playersColors = new(); 
-	public List<IPlayer> players = new List<IPlayer>();
-	private int _CurrenPlayerIndex;
+	public List<IPlayer> players;
+	private int _CurrentPlayerIndex;
 	public Action<IPlayer, IDisc> OnPlace;
 	public Action<IPlayer, IDisc> OnFlip;
 	public Action<IPlayer, IDisc, Position> MovePlayer;
@@ -23,12 +23,15 @@ public class GameController
 	public GameController(IPlayer player1, IPlayer player2, Board _board, IDisc disc1,IDisc disc2)
 	{
 	   this._board = _board;
+	   _MaxPlayer = 2;
+	   players = new List<IPlayer>{player1, player2};
+	   _CurrentPlayerIndex = 0;
 	   _playersColors[player1] = (Disc)disc1;
 	   _playersColors[player2] = (Disc)disc2;
 	}
 	public List<IPlayer> GetPlayers()
 	{
-		return new List<IPlayer>(players);
+		return players;
 	}
 	public bool CheckPlayer(IPlayer player)
 	{
@@ -41,8 +44,8 @@ public class GameController
 	}
 	public bool StartTurn()
 	{
-		int _MaxPlayer = 2;
-		if(players  is _MaxPlayer) 
+		
+		if(players is _MaxPlayer) 
 		{
 			return true;
 		}
@@ -50,11 +53,23 @@ public class GameController
 	}
 	public bool NextTurn()
 	{
-		if(players is MakeMove())
+		int nextPlayerIndex = (_CurrentPlayerIndex + 1) % players.Count;
+		IPlayer nextPlayer = players[nextPlayerIndex];
+
+		if(PossibleMove(nextPlayer))
+		{
+			_CurrentPlayerIndex = nextPlayerIndex;
+			return true;
+		}
+		else if (PossibleMove(players[_CurrentPlayerIndex]))
 		{
 			return true;
 		}
 		return false;
+	}
+	public void EndTurn()
+	{
+		
 	}
 	public Position MakeMove(IPlayer player, IDisc disc, Position position1, Position position2)
 	{
@@ -69,10 +84,6 @@ public class GameController
 		
 	}
 	public Player GetWinner()
-	{
-		
-	}
-	public void EndTurn()
 	{
 		
 	}
