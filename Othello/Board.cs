@@ -3,9 +3,11 @@ using Discs;
 using Player;
 using ColorDiscs;
 using InterfaceDisc;
+using InterfacePlayer;
 using System.Security.Cryptography.X509Certificates;
 using System.Runtime.CompilerServices;
-namespace Board;
+
+namespace BoardGame;
 
 public class Board
 {
