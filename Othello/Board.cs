@@ -64,8 +64,6 @@ public class Board
 	}
 	public bool CheckWinner()
 	{
-		// check if not any possible move each player 
-		// check if board is full
 		int blackCount = 0;
 		int whiteCount = 0;
 		
