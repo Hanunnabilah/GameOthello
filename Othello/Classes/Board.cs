@@ -4,15 +4,16 @@ using Player;
 using ColorDiscs;
 using InterfaceDisc;
 using InterfacePlayer;
-using System.Security.Cryptography.X509Certificates;
-using System.Runtime.CompilerServices;
+// using System.Security.Cryptography.X509Certificates;
+// using System.Runtime.CompilerServices;
 
 namespace BoardGame;
 
 public class Board
 {
 	private Disc[,] _discs = new Disc[8,8];
-	public void InitializeBoard()
+
+    public void InitializeBoard()
 	{
 		// set position in center board
 		int mid = _discs.GetLength(0) / 2;
