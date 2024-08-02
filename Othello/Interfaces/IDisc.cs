@@ -1,4 +1,5 @@
 using ColorDiscs;
+
 namespace InterfaceDisc;
 
 public interface IDisc
