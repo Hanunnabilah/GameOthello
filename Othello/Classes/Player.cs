@@ -1,6 +1,6 @@
 using InterfacePlayer;
 
-namespace Player;
+namespace Players;
 
 public class Player: IPlayer
 {

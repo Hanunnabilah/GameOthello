@@ -6,8 +6,10 @@ namespace Discs;
 public class Disc : IDisc
 {
 	public int IdDisc{get; private set;}
-	public Color color;
-	private bool _placed;
+	public Color color{get; set;}
+	//FITRI - buat apa?
+	public bool placed{get; set;} 
+	//FITRI - color public, knp butuh setcolor?
 	public void SetColor(Color color)
 	{
 		this.color = color;
@@ -17,12 +19,14 @@ public class Disc : IDisc
 		this.IdDisc = IdDisc;
 		this.color = color;
 	}
+	// FITRI - dibuat apa?
 	public bool IsPlace()
 	{
-		return _placed;
+		return placed;
 	}
+	// FITRI - dibuat apa?
 	public void Place()
 	{
-		_placed = true;
+		placed = true;
 	}
 }
