@@ -22,6 +22,7 @@ public class GameController
 	private int _MaxPlayer;
 	private Board _board;
 	private Dictionary<IPlayer, Disc> _playerColors = new Dictionary<IPlayer, Disc>();
+	private Dictionary<IPlayer, int> countDiscPlayer;
 	public List<IPlayer> players;
 	private int _CurrentPlayerIndex;
 	public Action<IPlayer, IDisc> OnPlace;
@@ -36,6 +37,11 @@ public class GameController
 		players = new List<IPlayer> { player1, player2 };
 		_playerColors.Add(player1, new Disc(1, Color.Black));
 		_playerColors.Add(player2, new Disc(2, Color.White));
+		countDiscPlayer = new Dictionary<IPlayer, int>
+        {
+            { player1, 0 },
+            { player2, 0 }
+        };
 	}
 	public List<IPlayer> GetPlayers()
 	{
@@ -98,6 +104,10 @@ public class GameController
 		{
 			NextTurn();
 		}
+	}
+	public Dictionary<IPlayer, int> GetCountDisc (Dictionary<IPlayer, Disc> playerColors)
+	{
+		return _board.CountDisc(playerColors);
 	}
 	// public Position MakeMove(IPlayer player, IDisc disc, Position position1, Position position2)
 	// FITRI - method makemove hanya diganti parameter atau argument saja 

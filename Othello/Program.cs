@@ -43,6 +43,7 @@ class Program
             controller.EndTurn();   
             controller.NextTurn();
         }
+        DisplayCountDisc(controller, player1, player2);
         GetWinner(othelloBoard,player1,player2);
        
     }
@@ -162,6 +163,22 @@ class Program
         else
         {
             Console.WriteLine("THE GAME IS A TIE!");   
+        }
+    }
+    public static void DisplayCountDisc(GameController controller, IPlayer player1, IPlayer player2)
+    {
+        var playerColor = new Dictionary<IPlayer, Disc>
+        {
+            { player1, new Disc(1, Color.Black) },
+            { player2, new Disc(2, Color.White) }
+        };
+        var discCounts = controller.GetCountDisc(playerColor);
+
+        // Menampilkan hasil disk setelah permainan selesai
+        Console.WriteLine("Disc counts:");
+        foreach (var count in discCounts)
+        {
+            Console.WriteLine($"{count.Key.Username} has {count.Value} discs.");
         }
     }
 
