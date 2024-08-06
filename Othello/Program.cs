@@ -43,6 +43,7 @@ class Program
             controller.EndTurn();   
             controller.NextTurn();
         }
+        Console.WriteLine("-------------- GAME OVER --------------");
         DisplayCountDisc(controller, player1, player2);
         GetWinner(othelloBoard,player1,player2);
        
@@ -157,12 +158,7 @@ class Program
         IPlayer winner = othelloBoard.GetWinner(playerColors);
         if(winner != null)
         {
-            Console.WriteLine("-------------- GAME OVER --------------");
-            Console.WriteLine($"{winner.Username} IS THE WINNER");
-        }
-        else
-        {
-            Console.WriteLine("THE GAME IS A TIE!");   
+            Console.WriteLine($"CONRATULATION {winner.Username} IS THE WINNER");
         }
     }
     public static void DisplayCountDisc(GameController controller, IPlayer player1, IPlayer player2)
@@ -175,10 +171,10 @@ class Program
         var discCounts = controller.GetCountDisc(playerColor);
 
         // Menampilkan hasil disk setelah permainan selesai
-        Console.WriteLine("Disc counts:");
+        Console.WriteLine("DISC COUNTS :");
         foreach (var count in discCounts)
         {
-            Console.WriteLine($"{count.Key.Username} has {count.Value} discs.");
+            Console.WriteLine($"{count.Key.Username} HAS {count.Value} DISCS.");
         }
     }
 
