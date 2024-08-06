@@ -366,25 +366,25 @@ public class GameController
 	{
 		return _board.GetWinner(playerColors);
 	}
-	public bool IsGameOver(Board board, IPlayer currentPlayer)
-	{
-		if(board.IsFull())
-		{
-			return true;
-		}
-		List<Position> possibleMoves = board.GetHints(currentPlayer);
-		if(possibleMoves.Count == 0)
-		{
-			player
-		}
-	}
-	public void EndGame()
-	{
-		if(IsGameOver())
-		{
+	// public bool IsGameOver(Board board, IPlayer currentPlayer)
+	// {
+	// 	if(board.IsFull())
+	// 	{
+	// 		return true;
+	// 	}
+	// 	List<Position> possibleMoves = board.GetHints(currentPlayer);
+	// 	if(possibleMoves.Count == 0)
+	// 	{
+	// 		player
+	// 	}
+	// }
+	// public void EndGame()
+	// {
+	// 	if(IsGameOver())
+	// 	{
 
-		}
-	}
+	// 	}
+	// }
 	// private void FlipDisc(IPlayer player, IDisc disc, Position position)
 	// FITRI - parameternya ganti
 	public void FlipDisc(Position positionFlip)

@@ -15,8 +15,8 @@ class Program
     {
         Board othelloBoard = new Board();
         othelloBoard.InitializeBoard();
-        Player player1 = new Player(1, "Player1");
-        Player player2 = new Player(2, "Player2");
+        IPlayer player1 = new Player(1, "PLAYER 1");
+        IPlayer player2 = new Player(2, "PLAYER 2");
         GameController controller = new GameController(player1, player2, othelloBoard);
         
         while(!othelloBoard.IsFull())
@@ -26,8 +26,11 @@ class Program
             IPlayer currentPlayer = controller.GetCurrentPlayer();
             Disc[,] discs = othelloBoard.GetAllDisc();
             List<Position> positionHints = othelloBoard.GetHints(currentPlayer);
-            ShowCurrentPlayer(currentPlayer);
+            
+            Console.WriteLine("    ");
             ShowBoard(discs);
+            Console.WriteLine("    ");
+            ShowCurrentPlayer(currentPlayer);
             PrintPossibleCoordinate(positionHints);
 
             // need validation for user input possible move
@@ -40,25 +43,7 @@ class Program
             controller.EndTurn();   
             controller.NextTurn();
         }
-        
-
-        // controller.StartTurn();
-        // discs = othelloBoard.GetAllDisc();
-        // ShowBoard(discs);
-        // PrintPossibleCoordinate(discs);
-
-        // Console.WriteLine("Letakkan x:");
-        // x =  int.Parse(Console.ReadLine());
-        // Console.WriteLine("Letakkan y:");
-        // y = int.Parse(Console.ReadLine());
-
-        // controller.MakeMove(x,y);
-        // controller.FlipDisc(x,y);
-        // controller.EndTurn();
-        // controller.NextTurn();
-        // controller.StartTurn();
-        // discs = othelloBoard.GetAllDisc();
-        // ShowBoard(discs);
+        GetWinner(othelloBoard,player1,player2);
        
     }
 
@@ -100,7 +85,7 @@ class Program
 
     public static void PrintPossibleCoordinate(List<Position> positionHints)
     {
-        string hintPosition = "Silahkan Masukkan Koordinat brikut: ";
+        string hintPosition = "PLEASE ENTER THE FOLLOWING COORDINATE --> ";
         for(int hintIndex = 0; hintIndex < positionHints.Count; hintIndex++)
         {
             Position hint = positionHints[hintIndex];
@@ -108,7 +93,7 @@ class Program
             {
                 hintPosition = hintPosition + hint.x + "," + hint.y;
             } else {
-                hintPosition = hintPosition + hint.x + "," + hint.y + " atau ";
+                hintPosition = hintPosition + hint.x + "," + hint.y + " OR ";
             }
         }
         Console.WriteLine(hintPosition);
@@ -124,7 +109,7 @@ class Program
 
         if (possibleMoves.Count == 0)
         {
-            Console.WriteLine($"{currentPlayer.Username} has no possible moves and is passing their turn.");
+            Console.WriteLine($"{currentPlayer.Username} HAS NO POSSIBLE MOVES AND IS PASSING THEIR TURN.");
             controller.PassTurn();
             // Ensure that the next turn is started after passing
             controller.StartTurn();
@@ -135,9 +120,9 @@ class Program
         bool isValidMove = false;
         while(true)
         {
-            Console.WriteLine("Set disc on coordinate x:" );
+            Console.WriteLine("SET DISC ON COORDINATE X:" );
             int x = int.Parse(Console.ReadLine());
-            Console.WriteLine("Set disc on coordinate y:");
+            Console.WriteLine("SET DISC ON COORDINATE y:");
             int y = int.Parse(Console.ReadLine());
 
             Position inputPlayerCoord = new Position(x, y);
@@ -158,6 +143,25 @@ class Program
             {
                 Console.WriteLine("INVALID INPUT COORDINATE, PLEASE TRY AGAIN!");
             }
+        }
+    }
+    public static void GetWinner(Board othelloBoard, IPlayer player1, IPlayer player2)
+    {
+        Dictionary<IPlayer, Disc> playerColors = new Dictionary<IPlayer, Disc>
+        {
+            {player1, new Disc(1, Color.Black)},
+            {player2, new Disc(2, Color.White)}
+        };
+
+        IPlayer winner = othelloBoard.GetWinner(playerColors);
+        if(winner != null)
+        {
+            Console.WriteLine("-------------- GAME OVER --------------");
+            Console.WriteLine($"{winner.Username} IS THE WINNER");
+        }
+        else
+        {
+            Console.WriteLine("THE GAME IS A TIE!");   
         }
     }
 
