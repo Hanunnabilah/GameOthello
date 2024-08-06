@@ -22,10 +22,17 @@ class Program
         while(!othelloBoard.IsFull())
         {
             controller.StartTurn();
-            HandlePassTurn(controller, othelloBoard);
             IPlayer currentPlayer = controller.GetCurrentPlayer();
-            Disc[,] discs = othelloBoard.GetAllDisc();
             List<Position> positionHints = othelloBoard.GetHints(currentPlayer);
+            bool isNoPossibleTurn = HandlePassTurn(positionHints,currentPlayer);
+
+            if(isNoPossibleTurn)
+            {
+                controller.PassTurn();
+                continue;
+            }
+
+            Disc[,] discs = othelloBoard.GetAllDisc();
             
             Console.WriteLine("    ");
             ShowBoard(discs);
@@ -104,18 +111,14 @@ class Program
     {
         Console.WriteLine($"IT'S YOUT TURN NOW : {currentPlayer.Username}");
     }
-    public static void HandlePassTurn(GameController controller, Board othelloBoard)
+    public static bool HandlePassTurn(List<Position> position, IPlayer currentPlayer)
     {
-        IPlayer currentPlayer = controller.GetCurrentPlayer();
-        List<Position> possibleMoves = othelloBoard.GetHints(currentPlayer);
-
-        if (possibleMoves.Count == 0)
+        if(position.Count == 0)
         {
             Console.WriteLine($"{currentPlayer.Username} HAS NO POSSIBLE MOVES AND IS PASSING THEIR TURN.");
-            controller.PassTurn();
-            // Ensure that the next turn is started after passing
-            controller.StartTurn();
+            return true;
         }
+        return false;
     }
     public static Position GetValidatedPosition(List<Position> positionHints) 
     {        

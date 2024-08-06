@@ -158,30 +158,6 @@ public class Board
 
         return countDiscPlayer;
     }
-	// public Dictionary<IPlayer, int> CountDisc (Dictionary<IPlayer, Disc> playerColors)
-	// {
-	// 	var countDiscs = new Dictionary<IPlayer, int>();
-
-	// 	foreach(var playerColor in playerColors)
-	// 	{
-	// 		countDiscs[playerColor.Key] = 0;
-	// 	}
-	// 	foreach(Disc disc in _discs)
-	// 	{
-	// 		if(disc != null)
-	// 		{
-	// 			foreach(var playerColor in playerColors)
-	// 			{
-	// 				if(disc.color == playerColor.Value.color)
-	// 				{
-	// 					countDiscs[playerColor.Key]++;
-	// 					break; // Jika disc sudah dihitung, tidak perlu memeriksa pemain lain
-	// 				}
-	// 			}
-	// 		}
-	// 	}
-	// 	return countDiscs;
-	// }
 	public List<Position> GetHints(IPlayer player)
 	{
 		List<Position> hints = new List<Position>();
