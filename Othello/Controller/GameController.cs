@@ -1,42 +1,29 @@
 using Discs;
-using Players;
 using PositionBoard;
-using InterfaceDisc;
-using ColorDiscs;
+using PieceDiscs;
 using BoardGame;
 using InterfacePlayer;
-using System.Security;
-using System.Data.Common;
-using System.Text.RegularExpressions;
-using System.Security.Cryptography.X509Certificates;
-using System.Xml;
-using System.Runtime.CompilerServices;
-using System.Xml.Schema;
-using System.Security.AccessControl;
-// using System.Drawing;
 
 namespace GameControl;
 
 public class GameController
 {
-	private int _MaxPlayer;
 	private Board _board;
 	private Dictionary<IPlayer, Disc> _playerColors = new Dictionary<IPlayer, Disc>();
 	private Dictionary<IPlayer, int> countDiscPlayer;
 	public List<IPlayer> players;
 	private int _CurrentPlayerIndex;
-	public Action<IPlayer, IDisc> OnPlace;
-	public Action<IPlayer, IDisc> OnFlip;
-	public Action<IPlayer, IDisc, Position> MovePlayer;
+	// public Action<IPlayer, IDisc> OnPlace;
+	// public Action<IPlayer, IDisc> OnFlip;
+	// public Action<IPlayer, IDisc, Position> MovePlayer;
 
 	public GameController(IPlayer player1, IPlayer player2, Board _board)
 	{
 		this._board = _board;
-		_MaxPlayer = 2;
 		_CurrentPlayerIndex = 0;
 		players = new List<IPlayer> { player1, player2 };
-		_playerColors.Add(player1, new Disc(1, Color.Black));
-		_playerColors.Add(player2, new Disc(2, Color.White));
+		_playerColors.Add(player1, new Disc(1, Piece.Black));
+		_playerColors.Add(player2, new Disc(2, Piece.White));
 		countDiscPlayer = new Dictionary<IPlayer, int>
         {
             { player1, 0 },
@@ -47,16 +34,6 @@ public class GameController
 	{
 		return players;
 	}
-	// FITRI - sudah memakai index player dalam list
-	// public bool CheckPlayer(IPlayer player)
-	// {
-	// 	// check player in list player
-	// 	if (!players.Contains(player))
-	// 	{
-	// 		return false;
-	// 	}
-	// 	return true;
-	// }
 	public IPlayer GetCurrentPlayer()
 	{
     	return players[_CurrentPlayerIndex];
@@ -86,9 +63,9 @@ public class GameController
 		{
 			for (int x = 0; x < getAllDisc.GetLength(0); x++)
 			{
-				if (getAllDisc[x, y].color == Color.Hint)
+				if (getAllDisc[x, y].piece == Piece.Hint)
 				{
-					_board.SetDisc(x, y, Color.Empty);
+					_board.SetDisc(x, y, Piece.Empty);
 				}
 			}
 		}
@@ -109,29 +86,26 @@ public class GameController
 	{
 		return _board.CountDisc(playerColors);
 	}
-	// public Position MakeMove(IPlayer player, IDisc disc, Position position1, Position position2)
-	// FITRI - method makemove hanya diganti parameter atau argument saja 
 	public void MakeMove(Position positionMove)
 	{
 		IPlayer currentPlayer = players[_CurrentPlayerIndex];
-		Color currentPlayerColor = _playerColors[currentPlayer].color;
+		Piece currentPlayerColor = _playerColors[currentPlayer].piece;
 
 		_board.SetDisc(positionMove.x, positionMove.y, currentPlayerColor);
 	}
 	
-	// FITRI - possible move diganti argument atau parameternya 
 	public bool PossibleMove()
 	{
 		bool PossibleMoveExist = false;
 		IPlayer currentPlayer = players[_CurrentPlayerIndex];
-		Color currentPlayerColor = _playerColors[currentPlayer].color;
+		Piece currentPlayerColor = _playerColors[currentPlayer].piece;
 
 		Disc[,] allDisc = _board.GetAllDisc();
 		for (int y = 0; y < allDisc.GetLength(0); y++)
 		{
 			for (int x = 0; x < allDisc.GetLength(1); x++)
 			{
-				if (currentPlayerColor == allDisc[x, y].color)
+				if (currentPlayerColor == allDisc[x, y].piece)
 				// jika warna pemain saat ini adalah warna yang sama 
 				{
 					Position position = new Position(x, y);
@@ -142,37 +116,30 @@ public class GameController
 		}
 		return PossibleMoveExist;
 	}
-	private bool CheckPossibleMove (Position position, Disc[,] allDisc, Color currentPlayerColor)
+	private bool CheckPossibleMove (Position position, Disc[,] allDisc, Piece currentPlayerColor)
 	{
 		bool PossibleMoveExist = false;
 
 		// default color lawan = black
-		Color enemyColor = Color.Black;
-		if (currentPlayerColor == Color.Black)
+		Piece enemyColor = Piece.Black;
+		if (currentPlayerColor == Piece.Black)
 		{
-			enemyColor = Color.White;
+			enemyColor = Piece.White;
 		}
 
 		// diagonal kiri atas
-		// if (allDisc[x-1, y-1].color == enemyColor && allDisc[x-2,y-2].color == Color.Empty) 
-		// {
-		// 	_board.SetDisc(x-2, y-2, Color.Hint);
-		// 	PossibleMoveExist = true;
-		// }
-		// int size = allDisc.GetLength(0);
-
 		int i = 1;
 		bool isEnemyFound = false;
 		while (position.x - i >= 0 && position.y - i >= 0)
 		{
-			if (allDisc[position.x - i, position.y - i].color == enemyColor)
+			if (allDisc[position.x - i, position.y - i].piece == enemyColor)
 			{
 				isEnemyFound = true;
 				i++;
 			}
-			else if (isEnemyFound && allDisc[position.x - i, position.y - i].color == Color.Empty)
+			else if (isEnemyFound && allDisc[position.x - i, position.y - i].piece == Piece.Empty)
 			{
-				_board.SetDisc(position.x - i, position.y - i, Color.Hint);
+				_board.SetDisc(position.x - i, position.y - i, Piece.Hint);
 				PossibleMoveExist = true;
 				break;
 			}
@@ -183,24 +150,19 @@ public class GameController
 		}
 
 		// diagonal kanan atas
-		// if (allDisc[x + 1, y - 1].color == enemyColor && allDisc[x + 2, y - 2].color == Color.Empty)
-		// {
-		// 	_board.SetDisc(x + 2, y - 2, Color.Hint);
-		// 	PossibleMoveExist = true;
-		// }
 		i = 1;
 		isEnemyFound = false;
 		int boardLength = allDisc.GetLength(0);
 		while (position.x + i <= boardLength - 1 && position.y - i >= 0)
 		{
-			if (allDisc[position.x + i, position.y - i].color == enemyColor)
+			if (allDisc[position.x + i, position.y - i].piece == enemyColor)
 			{
 				isEnemyFound = true;
 				i++;
 			}
-			else if (isEnemyFound && allDisc[position.x + i, position.y - i].color == Color.Empty)
+			else if (isEnemyFound && allDisc[position.x + i, position.y - i].piece == Piece.Empty)
 			{
-				_board.SetDisc(position.x + i, position.y - i, Color.Hint);
+				_board.SetDisc(position.x + i, position.y - i, Piece.Hint);
 				PossibleMoveExist = true;
 				break;
 			}
@@ -210,23 +172,18 @@ public class GameController
 			}
 		}
 		// diagonal kiri bawah
-		// if (allDisc[x - 1, y + 1].color == enemyColor && allDisc[x - 2, y + 2].color == Color.Empty)
-		// {
-		// 	_board.SetDisc(x - 2, y + 2, Color.Hint);
-		// 	PossibleMoveExist = true;
-		// }
 		i = 1;
 		isEnemyFound = false;
 		while (position.x - i >= 0 && position.y + i <= boardLength - 1)
 		{
-			if (allDisc[position.x - i, position.y + i].color == enemyColor)
+			if (allDisc[position.x - i, position.y + i].piece == enemyColor)
 			{
 				isEnemyFound = true;
 				i++;
 			}
-			else if (isEnemyFound && allDisc[position.x - i, position.y + i].color == Color.Empty)
+			else if (isEnemyFound && allDisc[position.x - i, position.y + i].piece == Piece.Empty)
 			{
-				_board.SetDisc(position.x - i, position.y + i, Color.Hint);
+				_board.SetDisc(position.x - i, position.y + i, Piece.Hint);
 				PossibleMoveExist = true;
 				break;
 			}
@@ -236,23 +193,18 @@ public class GameController
 			}
 		}
 		// diagonal kanan bawah
-		// if (allDisc[x + 1, y + 1].color == enemyColor && allDisc[x + 2, y + 2].color == Color.Empty)
-		// {
-		// 	_board.SetDisc(x + 2, y + 2, Color.Hint);
-		// 	PossibleMoveExist = true;
-		// }
 		i = 1;
 		isEnemyFound = false;
 		while (position.x + i <= boardLength - 1 && position.y + i <= boardLength - 1)
 		{
-			if (allDisc[position.x + i, position.y + i].color == enemyColor)
+			if (allDisc[position.x + i, position.y + i].piece == enemyColor)
 			{
 				isEnemyFound = true;
 				i++;
 			}
-			else if (isEnemyFound && allDisc[position.x + i, position.y + i].color == Color.Empty)
+			else if (isEnemyFound && allDisc[position.x + i, position.y + i].piece == Piece.Empty)
 			{
-				_board.SetDisc(position.x + i, position.y + i, Color.Hint);
+				_board.SetDisc(position.x + i, position.y + i, Piece.Hint);
 				break;
 			}
 			else
@@ -261,23 +213,18 @@ public class GameController
 			}
 		}
 		// bawah
-		// if (allDisc[x, y + 1].color == enemyColor && allDisc[x, y + 2].color == Color.Empty)
-		// {
-		// 	_board.SetDisc(x, y + 2, Color.Hint);
-		// 	PossibleMoveExist = true;
-		// }
 		i = 1;
 		isEnemyFound = false;
 		while (position.y + i <= boardLength - 1)
 		{
-			if (allDisc[position.x, position.y + i].color == enemyColor)
+			if (allDisc[position.x, position.y + i].piece == enemyColor)
 			{
 				isEnemyFound = true;
 				i++;
 			}
-			else if (isEnemyFound && allDisc[position.x, position.y + i].color == Color.Empty)
+			else if (isEnemyFound && allDisc[position.x, position.y + i].piece == Piece.Empty)
 			{
-				_board.SetDisc(position.x, position.y + i, Color.Hint);
+				_board.SetDisc(position.x, position.y + i, Piece.Hint);
 				break;
 			}
 			else
@@ -286,23 +233,18 @@ public class GameController
 			}
 		}
 		// atas
-		// if (allDisc[x, y - 1].color == enemyColor && allDisc[x, y - 2].color == Color.Empty)
-		// {
-		// 	_board.SetDisc(x, y - 2, Color.Hint);
-		// 	PossibleMoveExist = true;
-		// }
 		i = 1;
 		isEnemyFound = false;
 		while (position.y - i >= 0)
 		{
-			if (allDisc[position.x, position.y - i].color == enemyColor)
+			if (allDisc[position.x, position.y - i].piece == enemyColor)
 			{
 				isEnemyFound = true;
 				i++;
 			}
-			else if (isEnemyFound && allDisc[position.x, position.y - i].color == Color.Empty)
+			else if (isEnemyFound && allDisc[position.x, position.y - i].piece == Piece.Empty)
 			{
-				_board.SetDisc(position.x, position.y - i, Color.Hint);
+				_board.SetDisc(position.x, position.y - i, Piece.Hint);
 				break;
 			}
 			else
@@ -311,23 +253,18 @@ public class GameController
 			}
 		}
 		// samping kanan
-		// if (allDisc[x + 1, y].color == enemyColor && allDisc[x + 2, y].color == Color.Empty)
-		// {
-		// 	_board.SetDisc(x + 2, y, Color.Hint);
-		// 	PossibleMoveExist = true;
-		// }
 		i = 1;
 		isEnemyFound = false;
 		while (position.x + i <= boardLength - 1)
 		{
-			if (allDisc[position.x + i, position.y].color == enemyColor)
+			if (allDisc[position.x + i, position.y].piece == enemyColor)
 			{
 				isEnemyFound = true;
 				i++;
 			}
-			else if (isEnemyFound && allDisc[position.x + i, position.y].color == Color.Empty)
+			else if (isEnemyFound && allDisc[position.x + i, position.y].piece == Piece.Empty)
 			{
-				_board.SetDisc(position.x + i, position.y, Color.Hint);
+				_board.SetDisc(position.x + i, position.y, Piece.Hint);
 				break;
 			}
 			else
@@ -336,23 +273,18 @@ public class GameController
 			}
 		}
 		// samping kiri
-		// if (allDisc[x - 1, y].color == enemyColor && allDisc[x - 2, y].color == Color.Empty)
-		// {
-		// 	_board.SetDisc(x - 2, y, Color.Hint);
-		// 	PossibleMoveExist = true;
-		// }
 		i = 1;
 		isEnemyFound = false;
 		while (position.x - i >= 0)
 		{
-			if (allDisc[position.x - i, position.y].color == enemyColor)
+			if (allDisc[position.x - i, position.y].piece == enemyColor)
 			{
 				isEnemyFound = true;
 				i++;
 			}
-			else if (isEnemyFound && allDisc[position.x - i, position.y].color == Color.Empty)
+			else if (isEnemyFound && allDisc[position.x - i, position.y].piece == Piece.Empty)
 			{
-				_board.SetDisc(position.x - i, position.y, Color.Hint);
+				_board.SetDisc(position.x - i, position.y, Piece.Hint);
 				break;
 			}
 			else
@@ -370,62 +302,35 @@ public class GameController
 		}
 		return false;
 	}
-
-	// FITRI - Getwinner in gamecontroll 
 	public IPlayer GetWinner(Dictionary<IPlayer, Disc> playerColors)
 	{
 		return _board.GetWinner(playerColors);
 	}
-	// public bool IsGameOver(Board board, IPlayer currentPlayer)
-	// {
-	// 	if(board.IsFull())
-	// 	{
-	// 		return true;
-	// 	}
-	// 	List<Position> possibleMoves = board.GetHints(currentPlayer);
-	// 	if(possibleMoves.Count == 0)
-	// 	{
-	// 		player
-	// 	}
-	// }
-	// public void EndGame()
-	// {
-	// 	if(IsGameOver())
-	// 	{
-
-	// 	}
-	// }
-	// private void FlipDisc(IPlayer player, IDisc disc, Position position)
-	// FITRI - parameternya ganti
 	public void FlipDisc(Position positionFlip)
 	{
 
 		IPlayer currentPlayer = players[_CurrentPlayerIndex];
-		Color currentPlayerColor = _playerColors[currentPlayer].color;
+		Piece currentPlayerColor = _playerColors[currentPlayer].piece;
 
-		Color enemyColor = Color.Black;
-		if (currentPlayerColor == Color.Black)
+		Piece enemyColor = Piece.Black;
+		if (currentPlayerColor == Piece.Black)
 		{
-			enemyColor = Color.White;
+			enemyColor = Piece.White;
 		}
 		Disc[,] allDisc = _board.GetAllDisc();
 
 		// bawah
-		// if (allDisc[x, y + 1].color == enemyColor && allDisc[x, y + 2].color == currentPlayerColor)
-		// {
-		// 	_board.SetDisc(x, y + 1, currentPlayerColor);
-		// }
 		int i = 1;
 		bool isEnemyFound = false;
 		int boardLength = allDisc.GetLength(0);
 		while (positionFlip.y + i <= boardLength - 1)
 		{
-			if (allDisc[positionFlip.x, positionFlip.y + i].color == enemyColor)
+			if (allDisc[positionFlip.x, positionFlip.y + i].piece == enemyColor)
 			{
 				isEnemyFound = true;
 				i++;
 			}
-			else if (isEnemyFound && allDisc[positionFlip.x, positionFlip.y + i].color == currentPlayerColor)
+			else if (isEnemyFound && allDisc[positionFlip.x, positionFlip.y + i].piece == currentPlayerColor)
 			{
 				for (int discEnemy = 1; discEnemy <= i - 1; discEnemy++)
 				{
@@ -439,19 +344,15 @@ public class GameController
 			}
 		}
 		// atas
-		// if (allDisc[x, y - 1].color == enemyColor && allDisc[x, y - 2].color == currentPlayerColor)
-		// {
-		// 	_board.SetDisc(x, y - 1, currentPlayerColor);
-		// }
 		i = 1;
 		while (positionFlip.y - i >= 0)
 		{
-			if (allDisc[positionFlip.x, positionFlip.y - i].color == enemyColor)
+			if (allDisc[positionFlip.x, positionFlip.y - i].piece == enemyColor)
 			{
 				isEnemyFound = true;
 				i++;
 			}
-			else if (isEnemyFound && allDisc[positionFlip.x, positionFlip.y - i].color == currentPlayerColor)
+			else if (isEnemyFound && allDisc[positionFlip.x, positionFlip.y - i].piece == currentPlayerColor)
 			{
 				for(int discEnemy = 1; discEnemy <= i - 1; discEnemy++)
 				{
@@ -465,20 +366,16 @@ public class GameController
 			}
 		}
 		// samping kanan
-		// if (allDisc[x + 1, y].color == enemyColor && allDisc[x + 2, y].color == currentPlayerColor)
-		// {
-		// 	_board.SetDisc(x + 1, y, currentPlayerColor);
-		// }
 		i = 1;
 		isEnemyFound = false;
 		while (positionFlip.x + i <= boardLength - 1)
 		{
-			if (allDisc[positionFlip.x + i, positionFlip.y].color == enemyColor)
+			if (allDisc[positionFlip.x + i, positionFlip.y].piece == enemyColor)
 			{
 				isEnemyFound = true;
 				i++;
 			}
-			else if (isEnemyFound && allDisc[positionFlip.x + i, positionFlip.y].color == currentPlayerColor)
+			else if (isEnemyFound && allDisc[positionFlip.x + i, positionFlip.y].piece == currentPlayerColor)
 			{
 				for(int discEnemy = 1; discEnemy <= i - 1; discEnemy++)
 				{
@@ -492,20 +389,16 @@ public class GameController
 			}
 		}
 		// samping kiri
-		// if (allDisc[x - 1, y].color == enemyColor && allDisc[x - 2, y].color == currentPlayerColor)
-		// {
-		// 	_board.SetDisc(x - 1, y, currentPlayerColor);
-		// }
 		i = 1;
 		isEnemyFound = false;
 		while (positionFlip.x - i >= 0)
 		{
-			if (allDisc[positionFlip.x - i, positionFlip.y].color == enemyColor)
+			if (allDisc[positionFlip.x - i, positionFlip.y].piece == enemyColor)
 			{
 				isEnemyFound = true;
 				i++;
 			}
-			else if (isEnemyFound && allDisc[positionFlip.x - i, positionFlip.y].color == currentPlayerColor)
+			else if (isEnemyFound && allDisc[positionFlip.x - i, positionFlip.y].piece == currentPlayerColor)
 			{
 				for(int discEnemy = 1; discEnemy <= i - 1; discEnemy++)
 				{
@@ -519,20 +412,16 @@ public class GameController
 			}
 		}
 		// diagonal atas kanan
-		// if (allDisc[x + 1, y - 1].color == enemyColor && allDisc[x + 2, y - 2].color == currentPlayerColor)
-		// {
-		// 	_board.SetDisc(x + 1, y - 1, currentPlayerColor);
-		// }
 		i = 1;
 		isEnemyFound = false;
 		while (positionFlip.x + i <= boardLength - 1 && positionFlip.y - i >= 0)
 		{
-			if (allDisc[positionFlip.x + i, positionFlip.y - i].color == enemyColor)
+			if (allDisc[positionFlip.x + i, positionFlip.y - i].piece == enemyColor)
 			{
 				isEnemyFound = true;
 				i++;
 			}
-			else if (isEnemyFound && allDisc[positionFlip.x + i, positionFlip.y - i].color == currentPlayerColor)
+			else if (isEnemyFound && allDisc[positionFlip.x + i, positionFlip.y - i].piece == currentPlayerColor)
 			{
 				for(int discEnemy = 1; discEnemy <= i - 1; discEnemy++)
 				{
@@ -546,20 +435,16 @@ public class GameController
 			}
 		}
 		// diagonal atas kiri
-		// if (allDisc[x - 1, y - 1].color == enemyColor && allDisc[x - 2, y - 2].color == currentPlayerColor)
-		// {
-		// 	_board.SetDisc(x - 1, y - 1, currentPlayerColor);
-		// }
 		i = 1;
 		isEnemyFound = false;
 		while (positionFlip.x - i >= 0 && positionFlip.y - i >= 0)
 		{
-			if (allDisc[positionFlip.x - i, positionFlip.y - i].color == enemyColor)
+			if (allDisc[positionFlip.x - i, positionFlip.y - i].piece == enemyColor)
 			{
 				isEnemyFound = true;
 				i++;
 			}
-			else if (isEnemyFound && allDisc[positionFlip.x - i, positionFlip.y - i].color == currentPlayerColor)
+			else if (isEnemyFound && allDisc[positionFlip.x - i, positionFlip.y - i].piece == currentPlayerColor)
 			{
 				for(int discEnemy = 1; discEnemy <= i - 1; discEnemy++)
 				{
@@ -573,20 +458,16 @@ public class GameController
 			}
 		}
 		// diagonal kanan bawah
-		// if (allDisc[x + 1, y + 1].color == enemyColor && allDisc[x + 2, y + 2].color == currentPlayerColor)
-		// {
-		// 	_board.SetDisc(x + 1, y + 1, currentPlayerColor);
-		// }
 		i = 1;
 		isEnemyFound = false;
 		while (positionFlip.x + i <= boardLength - 1 && positionFlip.y + i <= boardLength - 1)
 		{
-			if (allDisc[positionFlip.x + i, positionFlip.y + i].color == enemyColor)
+			if (allDisc[positionFlip.x + i, positionFlip.y + i].piece == enemyColor)
 			{
 				isEnemyFound = true;
 				i++;
 			}
-			else if (isEnemyFound && allDisc[positionFlip.x + i, positionFlip.y + i].color == currentPlayerColor)
+			else if (isEnemyFound && allDisc[positionFlip.x + i, positionFlip.y + i].piece == currentPlayerColor)
 			{
 				for(int discEnemy = 1; discEnemy <= i - 1; discEnemy++)
 				{
@@ -600,20 +481,16 @@ public class GameController
 			}
 		}
 		// diagonal kiri bawah
-		// if (allDisc[x - 1, y + 1].color == enemyColor && allDisc[x - 2, y + 2].color == currentPlayerColor)
-		// {
-		// 	_board.SetDisc(x - 1, y + 1, currentPlayerColor);
-		// }
 		i = 1;
 		isEnemyFound = false;
 		while (positionFlip.x - i >= 0 && positionFlip.y + i <= boardLength - 1)
 		{
-			if (allDisc[positionFlip.x - i, positionFlip.y + i].color == enemyColor)
+			if (allDisc[positionFlip.x - i, positionFlip.y + i].piece == enemyColor)
 			{
 				isEnemyFound = true;
 				i++;
 			}
-			else if (isEnemyFound && allDisc[positionFlip.x - i, positionFlip.y + i].color == currentPlayerColor)
+			else if (isEnemyFound && allDisc[positionFlip.x - i, positionFlip.y + i].piece == currentPlayerColor)
 			{
 				
 				for(int discEnemy = 1; discEnemy <= i - 1; discEnemy++)
@@ -628,9 +505,4 @@ public class GameController
 			}
 		}
 	}
-    // FITRI - IEnumerable<position> digunakan untuk collection semua posisi
-    // private IEnumerable<Position> GetAllPosition (IPlayer player, IDisc disc)
-    // {
-
-    // }
 }

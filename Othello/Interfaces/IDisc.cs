@@ -1,14 +1,14 @@
-using ColorDiscs;
+using PieceDiscs;
 
 namespace InterfaceDisc;
 
 public interface IDisc
 {
 	public int IdDisc{get;}
-	public Color color{get;}
+	public Piece piece{get;}
 	public bool placed{get;}
-	public void SetColor(Color color) {}
-	public void Disc(int IdDisc, Color color) {}
+	public void SetColor(Piece piece) {}
+	public void Disc(int IdDisc, Piece piece) {}
 	// public bool IsPlace(); 
 	public void Place();
 }

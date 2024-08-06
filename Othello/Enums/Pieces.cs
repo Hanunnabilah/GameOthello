@@ -1,6 +1,6 @@
-namespace ColorDiscs;
+namespace PieceDiscs;
 
-public enum Color
+public enum Piece
 {
     Black,
     White,

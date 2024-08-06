@@ -1,14 +1,7 @@
 using PositionBoard;
 using Discs;
-using ColorDiscs;
-using InterfaceDisc;
+using PieceDiscs;
 using InterfacePlayer;
-using System.Security.Authentication;
-using System.Data.Common;
-using System.Security.Cryptography.X509Certificates;
-using Players;
-// using System.Security.Cryptography.X509Certificates;
-// using System.Runtime.CompilerServices;
 
 namespace BoardGame;
 
@@ -23,7 +16,7 @@ public class Board
 		{
 			for(int x = 0; x < _discs.GetLength(1); x++)
 			{
-				_discs[x,y] = new Disc(idDisc, Color.Empty);
+				_discs[x,y] = new Disc(idDisc, Piece.Empty);
 				idDisc++;
 			}
 		}
@@ -31,43 +24,17 @@ public class Board
 		int mid = _discs.GetLength(0) / 2;
 
 		// set 4 discs for first place on board
-		_discs[mid - 1, mid - 1].color = Color.White;
-		_discs[mid - 1, mid].color = Color.Black;
-		_discs[mid, mid - 1].color = Color.Black;
-		_discs[mid, mid].color = Color.White;
+		_discs[mid - 1, mid - 1].piece = Piece.White;
+		_discs[mid - 1, mid].piece = Piece.Black;
+		_discs[mid, mid - 1].piece = Piece.Black;
+		_discs[mid, mid].piece = Piece.White;
 	}
 
-	public void SetDisc(int x, int y, Color piece)
+	public void SetDisc(int x, int y, Piece piece)
 	// set disc sesuai dengan color pada argumen atau pparamter
 	{
-		_discs[x,y].color = piece; 
+		_discs[x,y].piece = piece; 
 	}
-	// TODO - fungsi getBoard?
-	public void GetBoard()
-	{		
-		
-	}
-	// FITRI - check apa?
-	// public void CheckPlayer(Position position, IDisc dics)
-	// {
-	// 	// check disc on board
-	// 	if(position.x < 0 || position.x >= _discs.GetLength(0) || position.y < 0 || position.y >= _discs.GetLength(1))
-	// 	{
-	// 		return;	
-	// 	}
-	// 	// position is filled?
-	// 	if(_discs is not null)
-	// 	{
-	// 		return;
-	// 	}
-	// }
-
-	// FITRI - ganti setdics
-	// public IDisc GetDisc(Position position)
-	// {
-	// 	// return discs based on position
-	// 	return _discs[position.x, position.y];
-	// }
 	public Disc[,] GetAllDisc()
 	{
 		return _discs;
@@ -78,7 +45,7 @@ public class Board
 		{
 			for(int x = 0; x < _discs.GetLength(0); x++)
 			{
-				if(_discs[x,y].color == Color.Empty)
+				if(_discs[x,y].piece == Piece.Empty)
 				{
 					return false;
 				}
@@ -95,11 +62,11 @@ public class Board
 		{
 			if (disc is not null)
 			{
-				if (disc.color is Color.Black)
+				if (disc.piece is Piece.Black)
 				{
 					blackCount++;
 				}
-				else if (disc.color is Color.White)
+				else if (disc.piece is Piece.White)
 				{
 					whiteCount++;
 				}
@@ -109,14 +76,14 @@ public class Board
 			{
 				if (blackCount > whiteCount)
 				{
-					if (playerColor.Value.color is Color.Black)
+					if (playerColor.Value.piece is Piece.Black)
 					{
 						return playerColor.Key;
 					}
 				}
 				else if (blackCount < whiteCount)
 				{
-					if (playerColor.Value.color is Color.White)
+					if (playerColor.Value.piece is Piece.White)
 					{
 						return playerColor.Key;
 					}
@@ -126,7 +93,6 @@ public class Board
 		// If the number of disks is the same or no winner can be found
 		return null;
 	}
-	// FITRI - parameter player 1 dan 2 sudah diset di dlm _playerColors
 	public bool CheckWinner(Dictionary<IPlayer, Disc> playerColors)
 	{
 		IPlayer winner = GetWinner(playerColors);
@@ -147,7 +113,7 @@ public class Board
             {
                 foreach (var playerColor in playerColors)
                 {
-                    if (disc.color == playerColor.Value.color)
+                    if (disc.piece == playerColor.Value.piece)
                     {
                         countDiscPlayer[playerColor.Key]++;
                         break; // Jika disc sudah dihitung, tidak perlu memeriksa pemain lain
@@ -166,7 +132,7 @@ public class Board
 		{
 			for(int x = 0; x < _discs.GetLength(0); x++)
 			{
-				if(_discs[x,y].color == Color.Hint)
+				if(_discs[x,y].piece == Piece.Hint)
 				{
 					Position hint = new Position(x,y);
 					hints.Add(hint);

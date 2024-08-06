@@ -1,4 +1,4 @@
-using ColorDiscs;
+using PieceDiscs;
 using InterfaceDisc;
 
 namespace Discs;
@@ -6,16 +6,16 @@ namespace Discs;
 public class Disc : IDisc
 {
 	public int IdDisc{get; private set;}
-	public Color color{get; set;}
+	public Piece piece{get; set;}
 	public bool placed{get; set;} 
-	public void SetColor(Color color)
+	public void SetColor(Piece piece)
 	{
-		this.color = color;
+		this.piece = piece;
 	}
-	public Disc(int IdDisc, Color color)
+	public Disc(int IdDisc, Piece piece)
 	{
 		this.IdDisc = IdDisc;
-		this.color = color;
+		this.piece = piece;
 	}
 	// FITRI - dibuat apa?
 	public bool IsPlace()

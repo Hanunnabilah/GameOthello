@@ -1,12 +1,9 @@
 ﻿using GameControl;
 using BoardGame;
-using InterfaceDisc;
 using Discs;
-using ColorDiscs;
+using PieceDiscs;
 using Players;
 using PositionBoard;
-using System.Security.Cryptography.X509Certificates;
-using System.Security.Principal;
 using InterfacePlayer;
 
 class Program
@@ -52,7 +49,7 @@ class Program
         }
         Console.WriteLine("-------------- GAME OVER --------------");
         DisplayCountDisc(controller, player1, player2);
-        GetWinner(othelloBoard,player1,player2);
+        GetWinner(controller,player1,player2);
        
     }
 
@@ -63,19 +60,19 @@ class Program
             for(int x = 0; x < _discs.GetLength(1); x++)
             {
                 // Console.Write(" " + x + y + "");
-                if(_discs[x,y].color == Color.Empty)
+                if(_discs[x,y].piece == Piece.Empty)
                 {
                     Console.Write("   ");
                 }
-                else if (_discs[x,y].color == Color.Black)
+                else if (_discs[x,y].piece == Piece.Black)
                 {
                     Console.Write(" X ");
                 }
-                else if (_discs[x,y].color == Color.White)
+                else if (_discs[x,y].piece == Piece.White)
                 {
                     Console.Write(" O ");
                 }
-                else if (_discs[x,y].color == Color.Hint)
+                else if (_discs[x,y].piece == Piece.Hint)
                 {
                     Console.Write(" H ");
                 }
@@ -150,28 +147,28 @@ class Program
             }
         }
     }
-    public static void GetWinner(Board othelloBoard, IPlayer player1, IPlayer player2)
+    public static Dictionary<IPlayer, Disc> InitializePlayerColors(IPlayer player1, IPlayer player2)
     {
-        Dictionary<IPlayer, Disc> playerColors = new Dictionary<IPlayer, Disc>
+        return new Dictionary<IPlayer, Disc>
         {
-            {player1, new Disc(1, Color.Black)},
-            {player2, new Disc(2, Color.White)}
+            { player1, new Disc(1, Piece.Black) },
+            { player2, new Disc(2, Piece.White) }
         };
-
-        IPlayer winner = othelloBoard.GetWinner(playerColors);
+    }
+    public static void GetWinner(GameController controller, IPlayer player1, IPlayer player2)
+    {
+        var playerColors = InitializePlayerColors(player1, player2);
+        IPlayer winner = controller.GetWinner(playerColors);
+        
         if(winner != null)
         {
-            Console.WriteLine($"CONRATULATION {winner.Username} IS THE WINNER");
+            Console.WriteLine($"CONGRATULATION {winner.Username} IS THE WINNER");
         }
     }
     public static void DisplayCountDisc(GameController controller, IPlayer player1, IPlayer player2)
     {
-        var playerColor = new Dictionary<IPlayer, Disc>
-        {
-            { player1, new Disc(1, Color.Black) },
-            { player2, new Disc(2, Color.White) }
-        };
-        var discCounts = controller.GetCountDisc(playerColor);
+        var playerColors = InitializePlayerColors(player1, player2);
+        var discCounts = controller.GetCountDisc(playerColors);
 
         // Menampilkan hasil disk setelah permainan selesai
         Console.WriteLine("DISC COUNTS :");
