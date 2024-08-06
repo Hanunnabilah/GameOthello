@@ -1,12 +1,12 @@
 using PositionBoard;
 using Discs;
-// using Players;
 using ColorDiscs;
 using InterfaceDisc;
 using InterfacePlayer;
 using System.Security.Authentication;
 using System.Data.Common;
 using System.Security.Cryptography.X509Certificates;
+using Players;
 // using System.Security.Cryptography.X509Certificates;
 // using System.Runtime.CompilerServices;
 
@@ -37,10 +37,10 @@ public class Board
 		_discs[mid, mid].color = Color.White;
 	}
 
-	public void SetDisc(int x, int y, Color color)
+	public void SetDisc(int x, int y, Color piece)
 	// set disc sesuai dengan color pada argumen atau pparamter
 	{
-		_discs[x,y].color = color; 
+		_discs[x,y].color = piece; 
 	}
 	// TODO - fungsi getBoard?
 	public void GetBoard()
@@ -86,81 +86,56 @@ public class Board
 		}
 		return true;
 	}
-	public bool CheckWinner()
+	public IPlayer GetWinner(Dictionary<IPlayer, Disc> _playerColors)
 	{
 		int blackCount = 0;
 		int whiteCount = 0;
-		
-		foreach(Disc disc in _discs)
+
+		foreach (Disc disc in _discs)
 		{
-			if(disc is not null)
+			if (disc is not null)
 			{
-				if(disc.color is Color.Black)
+				if (disc.color is Color.Black)
 				{
 					blackCount++;
 				}
-				else if(disc.color is Color.White)
+				else if (disc.color is Color.White)
 				{
 					whiteCount++;
 				}
 			}
-			if(blackCount > whiteCount)
+
+			foreach (var playerColor in _playerColors)
 			{
-				return true;
-			}
-			else if(blackCount < whiteCount)
-			{
-				return true;
-			}
-			return false;
-		}
-		return false;
-	}
-	// FITRI - parameter player 1 dan 2 sudah diset di dlm _playerColors
-	public IPlayer GetWinner (Dictionary<IPlayer, Disc> _playerColors)
-	{
-		int blackCount = 0;
-		int whiteCount = 0;
-		
-		foreach(Disc disc in _discs)
-		{
-			if(disc is not null)
-			{
-				if(disc.color is Color.Black)
+				if (blackCount > whiteCount)
 				{
-					blackCount++;
-				}
-				else if(disc.color is Color.White)
-				{
-					whiteCount++;
-				}
-			}
-			if(blackCount > whiteCount)
-			{
-				foreach(var playerColor in _playerColors)
-				{
-					if(playerColor.Value.color is Color.Black)
+					if (playerColor.Value.color is Color.Black)
 					{
 						return playerColor.Key;
 					}
 				}
-			}
-			else if(blackCount < whiteCount)
-			{
-				foreach(var playerColor in _playerColors)
+				else if (blackCount < whiteCount)
 				{
-					if(playerColor.Value.color is Color.White)
+					if (playerColor.Value.color is Color.White)
 					{
 						return playerColor.Key;
 					}
 				}
 			}
 		}
+		// If the number of disks is the same or no winner can be found
 		return null;
 	}
-	public List<Position> GetHints()
+	// FITRI - parameter player 1 dan 2 sudah diset di dlm _playerColors
+	public bool CheckWinner(Dictionary<IPlayer, Disc> playerColors)
+	{
+		IPlayer winner = GetWinner(playerColors);
+    	return winner != null;
+	}
+	public List<Position> GetHints(IPlayer player)
 	{
 		List<Position> hints = new List<Position>();
+
 		for(int y = 0; y < _discs.GetLength(1); y++)
 		{
 			for(int x = 0; x < _discs.GetLength(0); x++)

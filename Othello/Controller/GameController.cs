@@ -19,11 +19,11 @@ namespace GameControl;
 
 public class GameController
 {
-	private int _MaxPlayer = 2;
+	private int _MaxPlayer;
 	private Board _board;
 	private Dictionary<IPlayer, Disc> _playerColors = new Dictionary<IPlayer, Disc>();
 	public List<IPlayer> players;
-	private int _CurrentPlayerIndex = 0;
+	private int _CurrentPlayerIndex;
 	public Action<IPlayer, IDisc> OnPlace;
 	public Action<IPlayer, IDisc> OnFlip;
 	public Action<IPlayer, IDisc, Position> MovePlayer;
@@ -31,8 +31,9 @@ public class GameController
 	public GameController(IPlayer player1, IPlayer player2, Board _board)
 	{
 		this._board = _board;
+		_MaxPlayer = 2;
+		_CurrentPlayerIndex = 0;
 		players = new List<IPlayer> { player1, player2 };
-
 		_playerColors.Add(player1, new Disc(1, Color.Black));
 		_playerColors.Add(player2, new Disc(2, Color.White));
 	}
@@ -50,6 +51,10 @@ public class GameController
 	// 	}
 	// 	return true;
 	// }
+	public IPlayer GetCurrentPlayer()
+	{
+    	return players[_CurrentPlayerIndex];
+	}	
 	public bool StartTurn()
 	{
 		return PossibleMove();
@@ -80,6 +85,18 @@ public class GameController
 					_board.SetDisc(x, y, Color.Empty);
 				}
 			}
+		}
+	}
+	public void PassTurn()
+	// Give permission for players to pass the turn 
+	{
+		IPlayer currentPlayer = GetCurrentPlayer();
+		// get list of hint position for current player
+		List<Position> possibleMoves = _board.GetHints(currentPlayer);
+
+		if(possibleMoves.Count == 0)
+		{
+			NextTurn();
 		}
 	}
 	// public Position MakeMove(IPlayer player, IDisc disc, Position position1, Position position2)
@@ -115,7 +132,6 @@ public class GameController
 		}
 		return PossibleMoveExist;
 	}
-
 	private bool CheckPossibleMove (Position position, Disc[,] allDisc, Color currentPlayerColor)
 	{
 		bool PossibleMoveExist = false;
@@ -336,9 +352,9 @@ public class GameController
 		}
 		return PossibleMoveExist;
 	}
-	public bool CheckWin()
+	public bool CheckWin(Dictionary<IPlayer, Disc> playerColors)
 	{
-		if (_board.CheckWinner())
+		if(_board.CheckWinner(playerColors))
 		{
 			return true;
 		}
@@ -346,29 +362,31 @@ public class GameController
 	}
 
 	// FITRI - Getwinner in gamecontroll 
-	// public IPlayer GetWinner()
-	// {
-	// 	return _board.GetWinner();
-	// }
+	public IPlayer GetWinner(Dictionary<IPlayer, Disc> playerColors)
+	{
+		return _board.GetWinner(playerColors);
+	}
+	public bool IsGameOver(Board board, IPlayer currentPlayer)
+	{
+		if(board.IsFull())
+		{
+			return true;
+		}
+		List<Position> possibleMoves = board.GetHints(currentPlayer);
+		if(possibleMoves.Count == 0)
+		{
+			player
+		}
+	}
+	public void EndGame()
+	{
+		if(IsGameOver())
+		{
 
-	// public bool PassTurn(IPlayer player)
-	// // Give permission for players to pass the turn 
-	// {
-	// 	foreach(player is players[_CurrentPlayerIndex])
-	// 	{
-	// 		if(_CurrentPlayerIndex)
-	// 	}
-	// 	if(player != players[_CurrentPlayerIndex])
-	// 	// check apakah player sekarang adalah gilirannya
-	// 	{
-	// 		return false;
-	// 	}
-	// }
-
+		}
+	}
 	// private void FlipDisc(IPlayer player, IDisc disc, Position position)
-	// {
-
-	// }
+	// FITRI - parameternya ganti
 	public void FlipDisc(Position positionFlip)
 	{
 
@@ -600,10 +618,9 @@ public class GameController
 			}
 		}
 	}
+    // FITRI - IEnumerable<position> digunakan untuk collection semua posisi
+    // private IEnumerable<Position> GetAllPosition (IPlayer player, IDisc disc)
+    // {
 
-	// FITRI - IEnumerable<position> digunakan untuk apa?
-	// private IEnumerable<Position> GetAllPosition (IPlayer player, IDisc disc)
-	// {
-
-	// }
+    // }
 }

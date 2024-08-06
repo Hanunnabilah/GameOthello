@@ -7,9 +7,7 @@ public class Disc : IDisc
 {
 	public int IdDisc{get; private set;}
 	public Color color{get; set;}
-	//FITRI - buat apa?
 	public bool placed{get; set;} 
-	//FITRI - color public, knp butuh setcolor?
 	public void SetColor(Color color)
 	{
 		this.color = color;
