@@ -9,6 +9,4 @@ public interface IDisc
 	public bool placed{get;}
 	public void SetColor(Piece piece) {}
 	public void Disc(int IdDisc, Piece piece) {}
-	// public bool IsPlace(); 
-	public void Place();
 }

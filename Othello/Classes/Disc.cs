@@ -17,14 +17,4 @@ public class Disc : IDisc
 		this.IdDisc = IdDisc;
 		this.piece = piece;
 	}
-	// FITRI - dibuat apa?
-	public bool IsPlace()
-	{
-		return placed;
-	}
-	// FITRI - dibuat apa?
-	public void Place()
-	{
-		placed = true;
-	}
 }

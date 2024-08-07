@@ -9,12 +9,12 @@ public class Board
 {
 	private Disc[,] _discs = new Disc[8,8];
 
-    public void InitializeBoard()
+	public void InitializeBoard()
 	{
 		int idDisc = 0;
-		for(int y = 0; y < _discs.GetLength(0); y++)
+		for(int y = 0; y < _discs.GetLength(1); y++)
 		{
-			for(int x = 0; x < _discs.GetLength(1); x++)
+			for(int x = 0; x < _discs.GetLength(0); x++)
 			{
 				_discs[x,y] = new Disc(idDisc, Piece.Empty);
 				idDisc++;
@@ -41,9 +41,9 @@ public class Board
 	}
 	public bool IsFull()
 	{
-		for(int y = 0; y < _discs.GetLength(1); y++)
+		for(int y = 0; y < _discs.GetLength(0); y++)
 		{
-			for(int x = 0; x < _discs.GetLength(0); x++)
+			for(int x = 0; x < _discs.GetLength(1); x++)
 			{
 				if(_discs[x,y].piece == Piece.Empty)
 				{
@@ -53,6 +53,8 @@ public class Board
 		}
 		return true;
 	}
+	// Get the winner
+	// pindah gamecontroller 
 	public IPlayer GetWinner(Dictionary<IPlayer, Disc> _playerColors)
 	{
 		int blackCount = 0;
@@ -92,53 +94,5 @@ public class Board
 		}
 		// If the number of disks is the same or no winner can be found
 		return null;
-	}
-	public bool CheckWinner(Dictionary<IPlayer, Disc> playerColors)
-	{
-		IPlayer winner = GetWinner(playerColors);
-    	return winner != null;
-	}
-	public Dictionary<IPlayer, int> CountDisc(Dictionary<IPlayer, Disc> playerColors)
-    {
-        var countDiscPlayer = new Dictionary<IPlayer, int>();
-
-        foreach (var playerColor in playerColors)
-        {
-            countDiscPlayer[playerColor.Key] = 0;
-        }
-
-        foreach (Disc disc in _discs)
-        {
-            if (disc != null)
-            {
-                foreach (var playerColor in playerColors)
-                {
-                    if (disc.piece == playerColor.Value.piece)
-                    {
-                        countDiscPlayer[playerColor.Key]++;
-                        break; // Jika disc sudah dihitung, tidak perlu memeriksa pemain lain
-                    }
-                }
-            }
-        }
-
-        return countDiscPlayer;
-    }
-	public List<Position> GetHints(IPlayer player)
-	{
-		List<Position> hints = new List<Position>();
-
-		for(int y = 0; y < _discs.GetLength(1); y++)
-		{
-			for(int x = 0; x < _discs.GetLength(0); x++)
-			{
-				if(_discs[x,y].piece == Piece.Hint)
-				{
-					Position hint = new Position(x,y);
-					hints.Add(hint);
-				}
-			}
-		}
-		return hints;	
-	}
+	}		
 }

@@ -10,12 +10,9 @@ public class GameController
 {
 	private Board _board;
 	private Dictionary<IPlayer, Disc> _playerColors = new Dictionary<IPlayer, Disc>();
-	private Dictionary<IPlayer, int> countDiscPlayer;
+	private Dictionary<IPlayer, int> _countDiscPlayer;
 	public List<IPlayer> players;
 	private int _CurrentPlayerIndex;
-	// public Action<IPlayer, IDisc> OnPlace;
-	// public Action<IPlayer, IDisc> OnFlip;
-	// public Action<IPlayer, IDisc, Position> MovePlayer;
 
 	public GameController(IPlayer player1, IPlayer player2, Board _board)
 	{
@@ -24,24 +21,21 @@ public class GameController
 		players = new List<IPlayer> { player1, player2 };
 		_playerColors.Add(player1, new Disc(1, Piece.Black));
 		_playerColors.Add(player2, new Disc(2, Piece.White));
-		countDiscPlayer = new Dictionary<IPlayer, int>
-        {
-            { player1, 0 },
-            { player2, 0 }
-        };
-	}
-	public List<IPlayer> GetPlayers()
-	{
-		return players;
+		_countDiscPlayer = new Dictionary<IPlayer, int>
+		{
+			{ player1, 0 },
+			{ player2, 0 }
+		};
 	}
 	public IPlayer GetCurrentPlayer()
 	{
-    	return players[_CurrentPlayerIndex];
-	}	
+		return players[_CurrentPlayerIndex];
+	}
 	public bool StartTurn()
 	{
 		return PossibleMove();
 	}
+	// ganti return type
 	public void NextTurn()
 	{
 		// get current player by index in list players
@@ -54,7 +48,7 @@ public class GameController
 			_CurrentPlayerIndex = 0;
 		}
 	}
-
+	// ganti return type	
 	public void EndTurn()
 	{
 		Disc[,] getAllDisc = _board.GetAllDisc();
@@ -70,22 +64,20 @@ public class GameController
 			}
 		}
 	}
+	// ganti return type	
 	public void PassTurn()
 	// Give permission for players to pass the turn 
 	{
 		IPlayer currentPlayer = GetCurrentPlayer();
 		// get list of hint position for current player
-		List<Position> possibleMoves = _board.GetHints(currentPlayer);
+		List<Position> possibleMoves = GetHints(currentPlayer);
 
 		if(possibleMoves.Count == 0)
 		{
 			NextTurn();
 		}
 	}
-	public Dictionary<IPlayer, int> GetCountDisc (Dictionary<IPlayer, Disc> playerColors)
-	{
-		return _board.CountDisc(playerColors);
-	}
+	// return type bool makeMove
 	public void MakeMove(Position positionMove)
 	{
 		IPlayer currentPlayer = players[_CurrentPlayerIndex];
@@ -116,6 +108,7 @@ public class GameController
 		}
 		return PossibleMoveExist;
 	}
+	// refactor --> method baru
 	private bool CheckPossibleMove (Position position, Disc[,] allDisc, Piece currentPlayerColor)
 	{
 		bool PossibleMoveExist = false;
@@ -294,17 +287,70 @@ public class GameController
 		}
 		return PossibleMoveExist;
 	}
-	public bool CheckWin(Dictionary<IPlayer, Disc> playerColors)
+	public List<Position> GetHints(IPlayer player)
 	{
-		if(_board.CheckWinner(playerColors))
+		List<Position> hints = new List<Position>();
+		Disc[,] allDisc = _board.GetAllDisc();
+
+		for(int y = 0; y < allDisc.GetLength(0); y++)
+		{
+			for(int x = 0; x < allDisc.GetLength(1); x++)
+			{
+				if(allDisc[x,y].piece == Piece.Hint)
+				{
+					Position hint = new Position(x,y);
+					hints.Add(hint);
+				}
+			}
+		}
+		return hints;	
+	}
+	// sebelumnya method ini berada di board
+	// check if any winner
+	public bool CheckWinner(Dictionary<IPlayer, Disc> playerColors)
+	{
+		IPlayer winner = GetWinner(playerColors);
+		return winner != null;
+	}
+	// tidak memakai parameter
+	public bool /*CheckWin*/ ValidateWinner(Dictionary<IPlayer, Disc> playerColors)
+	{
+		if(CheckWinner(playerColors))
 		{
 			return true;
 		}
 		return false;
 	}
+	// tidak memakai parameter
 	public IPlayer GetWinner(Dictionary<IPlayer, Disc> playerColors)
 	{
 		return _board.GetWinner(playerColors);
+	}
+	public Dictionary<IPlayer, int> CountDisc(Dictionary<IPlayer, Disc> playerColors)
+	{
+		Disc[,] allDisc = _board.GetAllDisc();
+		var countDiscPlayer = new Dictionary<IPlayer, int>();
+
+		foreach (var playerColor in playerColors)
+		{
+			countDiscPlayer[playerColor.Key] = 0;
+		}
+
+		foreach (Disc disc in allDisc)
+		{
+			if (disc != null)
+			{
+				foreach (var playerColor in playerColors)
+				{
+					if (disc.piece == playerColor.Value.piece)
+					{
+						countDiscPlayer[playerColor.Key]++;
+						break; // Jika disc sudah dihitung, tidak perlu memeriksa pemain lain
+					}
+				}
+			}
+		}
+		return countDiscPlayer;
 	}
 	public void FlipDisc(Position positionFlip)
 	{
