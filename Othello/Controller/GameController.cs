@@ -305,52 +305,93 @@ public class GameController
 		}
 		return hints;	
 	}
-	// sebelumnya method ini berada di board
+	// REVISI - sebelumnya method ini berada di board
 	// check if any winner
 	public bool CheckWinner(Dictionary<IPlayer, Disc> playerColors)
 	{
 		IPlayer winner = GetWinner(playerColors);
 		return winner != null;
 	}
-	// tidak memakai parameter
-	public bool /*CheckWin*/ ValidateWinner(Dictionary<IPlayer, Disc> playerColors)
-	{
-		if(CheckWinner(playerColors))
-		{
-			return true;
-		}
-		return false;
-	}
-	// tidak memakai parameter
+	// REVISI - tidak memakai parameter
+	// public bool CheckWin(Dictionary<IPlayer, Disc> playerColors)
+	// {
+	// 	if(CheckWinner(playerColors))
+	// 	{
+	// 		return true;
+	// 	}
+	// 	return false;
+	// }
+	// REVISI - tidak memakai parameter
+	// public IPlayer GetWinner(Dictionary<IPlayer, Disc> _playerColors)
+	// {
+	// 	return _board.GetWinner(playerColors);
+	// }
 	public IPlayer GetWinner(Dictionary<IPlayer, Disc> playerColors)
 	{
-		return _board.GetWinner(playerColors);
+		int blackCount = 0;
+		int whiteCount = 0;
+		Disc[,] allDisc = _board.GetAllDisc();
+
+		foreach (Disc disc in allDisc)
+		{
+			if (disc is not null)
+			{
+				if (disc.piece is Piece.Black)
+				{
+					blackCount++;
+				}
+				else if (disc.piece is Piece.White)
+				{
+					whiteCount++;
+				}
+			}
+			foreach (var player in _playerColors)
+			{
+				if (blackCount++ > whiteCount++)
+				{
+					if (player.Value.piece is Piece.Black)
+					{
+						return player.Key;
+					}
+				}
+				else if (blackCount++ < whiteCount++)
+				{
+					if (player.Value.piece is Piece.White)
+					{
+						return player.Key;
+					}
+				}
+			}
+		}
+		// If the number of disks is the same or no winner can be found
+		return null;
 	}
-	public Dictionary<IPlayer, int> CountDisc(Dictionary<IPlayer, Disc> playerColors)
+	public Dictionary<IPlayer, int> CountDisc(Dictionary<IPlayer, Disc> _playerColors)
 	{
 		Disc[,] allDisc = _board.GetAllDisc();
-		var countDiscPlayer = new Dictionary<IPlayer, int>();
 
-		foreach (var playerColor in playerColors)
+		foreach (var player in _playerColors)
 		{
-			countDiscPlayer[playerColor.Key] = 0;
+			_countDiscPlayer[player.Key] = 0;
 		}
 
 		foreach (Disc disc in allDisc)
 		{
 			if (disc != null)
 			{
-				foreach (var playerColor in playerColors)
+				foreach (var player in _playerColors)
 				{
-					if (disc.piece == playerColor.Value.piece)
+					// Apakah potongan pada disk saat ini sama dengan potongan milik pemain
+					if (disc.piece == player.Value.piece)
 					{
-						countDiscPlayer[playerColor.Key]++;
+						// Menambah jumlah disk untuk pemain yang sesuai
+						_countDiscPlayer[player.Key]++;
 						break; // Jika disc sudah dihitung, tidak perlu memeriksa pemain lain
 					}
 				}
 			}
 		}
-		return countDiscPlayer;
+		return _countDiscPlayer;
 	}
 	public void FlipDisc(Position positionFlip)
 	{
