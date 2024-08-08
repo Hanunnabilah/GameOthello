@@ -52,47 +52,5 @@ public class Board
 			}
 		}
 		return true;
-	}
-	// Get the winner
-	// pindah gamecontroller 
-	public IPlayer GetWinner(Dictionary<IPlayer, Disc> _playerColors)
-	{
-		int blackCount = 0;
-		int whiteCount = 0;
-
-		foreach (Disc disc in _discs)
-		{
-			if (disc is not null)
-			{
-				if (disc.piece is Piece.Black)
-				{
-					blackCount++;
-				}
-				else if (disc.piece is Piece.White)
-				{
-					whiteCount++;
-				}
-			}
-
-			foreach (var playerColor in _playerColors)
-			{
-				if (blackCount > whiteCount)
-				{
-					if (playerColor.Value.piece is Piece.Black)
-					{
-						return playerColor.Key;
-					}
-				}
-				else if (blackCount < whiteCount)
-				{
-					if (playerColor.Value.piece is Piece.White)
-					{
-						return playerColor.Key;
-					}
-				}
-			}
-		}
-		// If the number of disks is the same or no winner can be found
-		return null;
-	}		
+	}	
 }
