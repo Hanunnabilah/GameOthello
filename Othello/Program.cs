@@ -5,16 +5,22 @@ using PieceDiscs;
 using Players;
 using PositionBoard;
 using InterfacePlayer;
+// using log4net;
+// using log4net.Config;
+using NLog;
 
 class Program
 {
 	static void Main()
 	{
+		// ILog logger = LogManager.GetLogger(typeof(GameController));
+		// XmlConfigurator.Configure(new FileInfo("Log4Net.config"));
+		ILogger logger = LogManager.GetCurrentClassLogger();
 		Board othelloBoard = new Board();
 		othelloBoard.InitializeBoard();
 		IPlayer player1 = new Player(1, "PLAYER 1");
 		IPlayer player2 = new Player(2, "PLAYER 2");
-		GameController controller = new GameController(player1, player2, othelloBoard);
+		GameController controller = new GameController(player1, player2, othelloBoard,logger);
 		
 		while(!othelloBoard.IsFull())
 		{

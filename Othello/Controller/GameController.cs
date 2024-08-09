@@ -3,6 +3,9 @@ using PositionBoard;
 using PieceDiscs;
 using BoardGame;
 using InterfacePlayer;
+using NLog;
+// using log4net;
+// using log4net.Config;
 
 namespace GameControl;
 
@@ -13,9 +16,12 @@ public class GameController
 	private Dictionary<IPlayer, int> _countDiscPlayer;
 	public List<IPlayer> players;
 	private int _CurrentPlayerIndex;
+	// private ILog _log;
+	private ILogger _log;
 
-	public GameController(IPlayer player1, IPlayer player2, Board _board)
+	public GameController(IPlayer player1, IPlayer player2, Board _board,ILogger log)
 	{
+		_log = log;
 		this._board = _board;
 		_CurrentPlayerIndex = 0;
 		players = new List<IPlayer> { player1, player2 };
@@ -84,6 +90,7 @@ public class GameController
 		Piece currentPlayerColor = _playerColors[currentPlayer].piece;
 
 		_board.SetDisc(positionMove.x, positionMove.y, currentPlayerColor);
+		_log.Info("Move Dics Executed");
 	}
 	
 	public bool PossibleMove()

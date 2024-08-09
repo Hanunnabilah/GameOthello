@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\Batch 11\\Documents\\Othello\\GameOthello\\Othello\\Othello.csproj": {}
+    "C:\\Users\\Batch 11\\Documents\\Othello\\GameOthello\\Othello\\Othello.csproj": {}
   },
   "projects": {
-    "c:\\Users\\Batch 11\\Documents\\Othello\\GameOthello\\Othello\\Othello.csproj": {
+    "C:\\Users\\Batch 11\\Documents\\Othello\\GameOthello\\Othello\\Othello.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\Batch 11\\Documents\\Othello\\GameOthello\\Othello\\Othello.csproj",
+        "projectUniqueName": "C:\\Users\\Batch 11\\Documents\\Othello\\GameOthello\\Othello\\Othello.csproj",
         "projectName": "Othello",
-        "projectPath": "c:\\Users\\Batch 11\\Documents\\Othello\\GameOthello\\Othello\\Othello.csproj",
+        "projectPath": "C:\\Users\\Batch 11\\Documents\\Othello\\GameOthello\\Othello\\Othello.csproj",
         "packagesPath": "C:\\Users\\Batch 11\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\Batch 11\\Documents\\Othello\\GameOthello\\Othello\\obj\\",
+        "outputPath": "C:\\Users\\Batch 11\\Documents\\Othello\\GameOthello\\Othello\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Batch 11\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -42,6 +42,12 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
+          "dependencies": {
+            "NLog": {
+              "target": "Package",
+              "version": "[5.3.2, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",

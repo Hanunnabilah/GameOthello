@@ -28,3 +28,6 @@ c:\Users\Batch 11\Documents\Othello\GameOthello\Othello\obj\Debug\net8.0\refint\
 c:\Users\Batch 11\Documents\Othello\GameOthello\Othello\obj\Debug\net8.0\Othello.pdb
 c:\Users\Batch 11\Documents\Othello\GameOthello\Othello\obj\Debug\net8.0\Othello.genruntimeconfig.cache
 c:\Users\Batch 11\Documents\Othello\GameOthello\Othello\obj\Debug\net8.0\ref\Othello.dll
+C:\Users\Batch 11\Documents\Othello\GameOthello\Othello\obj\Debug\net8.0\Othello.csproj.AssemblyReference.cache
+c:\Users\Batch 11\Documents\Othello\GameOthello\Othello\obj\Debug\net8.0\Othello.csproj.Up2Date
+C:\Users\Batch 11\Documents\Othello\GameOthello\Othello\bin\Debug\net8.0\NLog.dll
