@@ -13,7 +13,6 @@ public class GameController
 {
 	private Board _board;
 	private Dictionary<IPlayer, Disc> _playerColors = new Dictionary<IPlayer, Disc>();
-	private Dictionary<IPlayer, int> _countDiscPlayer;
 	public List<IPlayer> players;
 	private int _CurrentPlayerIndex;
 	// private ILog _log;
@@ -27,11 +26,6 @@ public class GameController
 		players = new List<IPlayer> { player1, player2 };
 		_playerColors.Add(player1, new Disc(1, Piece.Black));
 		_playerColors.Add(player2, new Disc(2, Piece.White));
-		_countDiscPlayer = new Dictionary<IPlayer, int>
-		{
-			{ player1, 0 },
-			{ player2, 0 }
-		};
 	}
 	public IPlayer GetCurrentPlayer()
 	{
@@ -211,73 +205,43 @@ public class GameController
 	// {
 	// 	return _board.GetWinner(playerColors);
 	// }
+
 	public IPlayer GetWinner(Dictionary<IPlayer, Disc> playerColors)
 	{
-		int blackCount = 0;
-		int whiteCount = 0;
-		Disc[,] allDisc = _board.GetAllDisc();
-
-		foreach (Disc disc in allDisc)
-		{
-			if (disc is not null)
-			{
-				if (disc.piece is Piece.Black)
-				{
-					blackCount++;
-				}
-				else if (disc.piece is Piece.White)
-				{
-					whiteCount++;
-				}
-			}
-			foreach (var player in _playerColors)
-			{
-				if (blackCount++ > whiteCount++)
-				{
-					if (player.Value.piece is Piece.Black)
-					{
-						return player.Key;
-					}
-				}
-				else if (blackCount++ < whiteCount++)
-				{
-					if (player.Value.piece is Piece.White)
-					{
-						return player.Key;
-					}
-				}
-			}
-		}
-		// If the number of disks is the same or no winner can be found
-		return null;
-	}
-	public Dictionary<IPlayer, int> CountDisc(Dictionary<IPlayer, Disc> _playerColors)
-	{
-		Disc[,] allDisc = _board.GetAllDisc();
+		// Count discs for each color
+		int blackCount = CountDisc(Piece.Black);
+		int whiteCount = CountDisc(Piece.White);
 
 		foreach (var player in _playerColors)
 		{
-			_countDiscPlayer[player.Key] = 0;
+			if (blackCount > whiteCount && player.Value.piece == Piece.Black)
+			{
+				return player.Key;
+			}
+			else if (whiteCount > blackCount && player.Value.piece == Piece.White)
+			{
+				return player.Key;
+			}
 		}
+		// If the number of discs is the same or no winner can be found
+		return null;
+	}
+
+	public int CountDisc(Piece pieceColor)
+	{
+		int count = 0;
+		Disc[,] allDisc = _board.GetAllDisc();
 
 		foreach (Disc disc in allDisc)
 		{
-			if (disc != null)
+			if (disc != null && disc.piece == pieceColor)
 			{
-				foreach (var player in _playerColors)
-				{
-					// Apakah potongan pada disk saat ini sama dengan potongan milik pemain
-					if (disc.piece == player.Value.piece)
-					{
-						// Menambah jumlah disk untuk pemain yang sesuai
-						_countDiscPlayer[player.Key]++;
-						break; // Jika disc sudah dihitung, tidak perlu memeriksa pemain lain
-					}
-				}
+				count++;
 			}
 		}
-		return _countDiscPlayer;
+		return count;
 	}
+
 	public void FlipDisc(Position positionFlip)
 	{
 		IPlayer currentPlayer = players[_CurrentPlayerIndex];
@@ -336,5 +300,4 @@ public class GameController
 			y += yIncrement;
 		}
 	}
-
 }
