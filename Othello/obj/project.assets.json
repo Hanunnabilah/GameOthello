@@ -49,19 +49,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Batch 11\\.nuget\\packages\\": {}
+    "/Users/hanun/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Batch 11\\Documents\\Othello\\GameOthello\\Othello\\Othello.csproj",
+      "projectUniqueName": "/Users/hanun/Documents/Bootcamp Formulatrix/GameOthello/Othello/Othello.csproj",
       "projectName": "Othello",
-      "projectPath": "C:\\Users\\Batch 11\\Documents\\Othello\\GameOthello\\Othello\\Othello.csproj",
-      "packagesPath": "C:\\Users\\Batch 11\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Batch 11\\Documents\\Othello\\GameOthello\\Othello\\obj\\",
+      "projectPath": "/Users/hanun/Documents/Bootcamp Formulatrix/GameOthello/Othello/Othello.csproj",
+      "packagesPath": "/Users/hanun/.nuget/packages/",
+      "outputPath": "/Users/hanun/Documents/Bootcamp Formulatrix/GameOthello/Othello/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Batch 11\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "/Users/hanun/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -111,7 +111,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.302/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.302/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
