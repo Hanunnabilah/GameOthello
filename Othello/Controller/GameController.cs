@@ -120,13 +120,13 @@ public class GameController
 		var directions = new (int x, int y)[]
 		{
 			(-1, -1), // Diagonal top-left
-        	(1, -1),  // Diagonal top-right
-        	(-1, 1),  // Diagonal bottom-left
-        	(1, 1),   // Diagonal bottom-right
-        	(0, 1),   // Down
-        	(0, -1),  // Up
-        	(1, 0),   // Right
-        	(-1, 0)   // Left
+			(1, -1),  // Diagonal top-right
+			(-1, 1),  // Diagonal bottom-left
+			(1, 1),   // Diagonal bottom-right
+			(0, 1),   // Down
+			(0, -1),  // Up
+			(1, 0),   // Right
+			(-1, 0)   // Left
 		};
 
 		foreach (var (dx, dy) in directions)
@@ -251,22 +251,32 @@ public class GameController
 		Disc[,] allDisc = _board.GetAllDisc();
 		int boardLength = allDisc.GetLength(0);
 
-		// Define the 8 possible directions (x, y) increments
-		int[][] directions = new int[][]
+		var directions = new (int x, int y)[]
 		{
-			new int[] { 0, 1 },   // Down
-        	new int[] { 1, 0 },   // Right
-        	new int[] { 0, -1 },  // Up
-       		new int[] { -1, 0 },  // Left
-        	new int[] { 1, -1 },  // Diagonal up-right
-        	new int[] { -1, -1 }, // Diagonal up-left
-        	new int[] { 1, 1 },   // Diagonal down-right
-        	new int[] { -1, 1 }   // Diagonal down-left
+			(-1, -1), // Diagonal top-left
+			(1, -1),  // Diagonal top-right
+			(-1, 1),  // Diagonal bottom-left
+			(1, 1),   // Diagonal bottom-right
+			(0, 1),   // Down
+			(0, -1),  // Up
+			(1, 0),   // Right
+			(-1, 0)   // Left
 		};
-
-		foreach (var direction in directions)
+		// Define the 8 possible directions (x, y) increments
+		// int[][] directions = new int[][]		
+		// {
+		// 	new int[] { 0, 1 },   // Down
+		// 	new int[] { 1, 0 },   // Right
+		// 	new int[] { 0, -1 },  // Up
+	   	// 	new int[] { -1, 0 },  // Left
+		// 	new int[] { 1, -1 },  // Diagonal up-right
+		// 	new int[] { -1, -1 }, // Diagonal up-left
+		// 	new int[] { 1, 1 },   // Diagonal down-right
+		// 	new int[] { -1, 1 }   // Diagonal down-left
+		// };
+		foreach (var (dx, dy) in directions)
 		{
-			FlipInDirection(positionFlip, direction[0], direction[1], currentPlayerColor, enemyColor, allDisc, boardLength);
+			FlipInDirection(positionFlip, dx, dy, currentPlayerColor, enemyColor, allDisc, boardLength);
 		}
 	}
 
