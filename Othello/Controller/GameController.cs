@@ -65,7 +65,7 @@ public class GameController
 		}
 	}
 	// ganti return type	
-	public void PassTurn()
+	public bool PassTurn()
 	// Give permission for players to pass the turn 
 	{
 		IPlayer currentPlayer = GetCurrentPlayer();
@@ -76,15 +76,25 @@ public class GameController
 		{
 			NextTurn();
 		}
+		return possibleMoves.Any();
 	}
 	// return type bool makeMove
-	public void MakeMove(Position positionMove)
+	public bool MakeMove(Position positionMove)
 	{
 		IPlayer currentPlayer = players[_CurrentPlayerIndex];
 		Piece currentPlayerColor = _playerColors[currentPlayer].piece;
 
-		_board.SetDisc(positionMove.x, positionMove.y, currentPlayerColor);
-		_log.Info("Move Dics Executed");
+		if (_board.GetDisc(positionMove.x, positionMove.y).piece == Piece.Empty)
+		{
+			_board.SetDisc(positionMove.x, positionMove.y, currentPlayerColor);
+			//_log.Info("Move Disc Executed");
+			return true;
+		}
+		else
+		{
+			//_log.Warn("Move Disc Failed");
+			return false;
+		}
 	}
 
 	public bool PossibleMove()
@@ -185,27 +195,13 @@ public class GameController
 		return hints;
 	}
 	// REVISI - sebelumnya method ini berada di board
-	// check if any winner
+	// REVISI - tidak memakai parameter
 	public bool CheckWinner(Dictionary<IPlayer, Disc> playerColors)
 	{
 		IPlayer winner = GetWinner(playerColors);
 		return winner != null;
 	}
 	// REVISI - tidak memakai parameter
-	// public bool CheckWin(Dictionary<IPlayer, Disc> playerColors)
-	// {
-	// 	if(CheckWinner(playerColors))
-	// 	{
-	// 		return true;
-	// 	}
-	// 	return false;
-	// }
-	// REVISI - tidak memakai parameter
-	// public IPlayer GetWinner(Dictionary<IPlayer, Disc> _playerColors)
-	// {
-	// 	return _board.GetWinner(playerColors);
-	// }
-
 	public IPlayer GetWinner(Dictionary<IPlayer, Disc> playerColors)
 	{
 		// Count discs for each color
@@ -226,7 +222,6 @@ public class GameController
 		// If the number of discs is the same or no winner can be found
 		return null;
 	}
-
 	public int CountDisc(Piece pieceColor)
 	{
 		int count = 0;
@@ -262,18 +257,6 @@ public class GameController
 			(1, 0),   // Right
 			(-1, 0)   // Left
 		};
-		// Define the 8 possible directions (x, y) increments
-		// int[][] directions = new int[][]		
-		// {
-		// 	new int[] { 0, 1 },   // Down
-		// 	new int[] { 1, 0 },   // Right
-		// 	new int[] { 0, -1 },  // Up
-	   	// 	new int[] { -1, 0 },  // Left
-		// 	new int[] { 1, -1 },  // Diagonal up-right
-		// 	new int[] { -1, -1 }, // Diagonal up-left
-		// 	new int[] { 1, 1 },   // Diagonal down-right
-		// 	new int[] { -1, 1 }   // Diagonal down-left
-		// };
 		foreach (var (dx, dy) in directions)
 		{
 			FlipInDirection(positionFlip, dx, dy, currentPlayerColor, enemyColor, allDisc, boardLength);

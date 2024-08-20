@@ -31,10 +31,14 @@ public class Board
 	}
 
 	public void SetDisc(int x, int y, Piece piece)
-	// set disc sesuai dengan color pada argumen atau pparamter
+	// set disc sesuai dengan color pada argumen atau paramter
 	{
 		_discs[x,y].piece = piece; 
 	}
+	public Disc GetDisc(int x, int y)
+    {
+        return _discs[x, y];
+    }
 	public Disc[,] GetAllDisc()
 	{
 		return _discs;
