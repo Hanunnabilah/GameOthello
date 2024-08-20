@@ -35,10 +35,9 @@ public class GameController
 	{
 		return PossibleMove();
 	}
-	// ganti return type
 	public bool NextTurn()
 	{
-		// get current player by index in list players
+		// Get current player by index in list players
 		if (_CurrentPlayerIndex == 0)
 		{
 			_CurrentPlayerIndex = 1;
@@ -49,7 +48,6 @@ public class GameController
 		}
 		return true;
 	}
-	// ganti return type	
 	public bool EndTurn()
 	{
 		Disc[,] getAllDisc = _board.GetAllDisc();
@@ -68,28 +66,41 @@ public class GameController
 		}
 		return hintsCleared;
 	}
-	// ganti return type	
-	public void PassTurn()
+	public bool PassTurn()
 	// Give permission for players to pass the turn 
 	{
 		IPlayer currentPlayer = GetCurrentPlayer();
-		// get list of hint position for current player
+		// Get list of hint position for current player
 		List<Position> possibleMoves = GetHints(currentPlayer);
 
 		if (possibleMoves.Count == 0)
 		{
 			NextTurn();
 		}
+		return possibleMoves.Any();
 	}
-	// return type bool makeMove
 	public void MakeMove(Position positionMove)
 	{
 		IPlayer currentPlayer = players[_CurrentPlayerIndex];
 		Piece currentPlayerColor = _playerColors[currentPlayer].piece;
 
-		_board.SetDisc(positionMove.x, positionMove.y, currentPlayerColor);
-		_log.Info("Move Dics Executed");
-	}
+		// if (IsValidMove(positionMove, currentPlayerColor))
+		// {
+			_board.SetDisc(positionMove.x, positionMove.y, currentPlayerColor);
+			// FlipDisc(positionMove);
+		// 	// _log.Info($"Move executed at position ({positionMove.x}, {positionMove.y}) by player with color {currentPlayerColor}");
+		// 	return true; 
+		// }
+		// else
+		// {
+		// 	// _log.Warn($"Move failed at position ({positionMove.x}, {positionMove.y}) by player with color {currentPlayerColor}");
+		// 	return false;
+		// }
+		}
+	// private bool IsValidMove(Position position, Piece color)
+	// {
+	// 	return CheckPossibleMove(position, _board.GetAllDisc(), color);
+	// }
 	public bool PossibleMove()
 	{
 		bool PossibleMoveExist = false;
@@ -102,10 +113,10 @@ public class GameController
 			for (int x = 0; x < allDisc.GetLength(1); x++)
 			{
 				if (currentPlayerColor == allDisc[x, y].piece)
-				// jika warna pemain saat ini adalah warna yang sama 
+				// If the current player's color is the same color
 				{
 					Position position = new Position(x, y);
-					// maka cek disc sebelahnya
+					// Check the disc next to it
 					PossibleMoveExist = CheckPossibleMove(position, allDisc, currentPlayerColor);
 				}
 			}
@@ -163,7 +174,6 @@ public class GameController
 			{
 				break;
 			}
-
 			x += dx;
 			y += dy;
 		}
@@ -187,28 +197,13 @@ public class GameController
 		}
 		return hints;
 	}
-	// REVISI - sebelumnya method ini berada di board
-	// check if any winner
+	// REVISI - tidak memakai parameter
 	public bool CheckWinner(Dictionary<IPlayer, Disc> playerColors)
 	{
 		IPlayer winner = GetWinner(playerColors);
 		return winner != null;
 	}
 	// REVISI - tidak memakai parameter
-	// public bool CheckWin(Dictionary<IPlayer, Disc> playerColors)
-	// {
-	// 	if(CheckWinner(playerColors))
-	// 	{
-	// 		return true;
-	// 	}
-	// 	return false;
-	// }
-	// REVISI - tidak memakai parameter
-	// public IPlayer GetWinner(Dictionary<IPlayer, Disc> _playerColors)
-	// {
-	// 	return _board.GetWinner(playerColors);
-	// }
-
 	public IPlayer GetWinner(Dictionary<IPlayer, Disc> playerColors)
 	{
 		// Count discs for each color
@@ -229,7 +224,6 @@ public class GameController
 		// If the number of discs is the same or no winner can be found
 		return null;
 	}
-
 	public int CountDisc(Piece pieceColor)
 	{
 		int count = 0;
@@ -244,7 +238,6 @@ public class GameController
 		}
 		return count;
 	}
-
 	public void FlipDisc(Position positionFlip)
 	{
 		IPlayer currentPlayer = players[_CurrentPlayerIndex];
@@ -265,18 +258,6 @@ public class GameController
 			(1, 0),   // Right
 			(-1, 0)   // Left
 		};
-		// Define the 8 possible directions (x, y) increments
-		// int[][] directions = new int[][]		
-		// {
-		// 	new int[] { 0, 1 },   // Down
-		// 	new int[] { 1, 0 },   // Right
-		// 	new int[] { 0, -1 },  // Up
-	   	// 	new int[] { -1, 0 },  // Left
-		// 	new int[] { 1, -1 },  // Diagonal up-right
-		// 	new int[] { -1, -1 }, // Diagonal up-left
-		// 	new int[] { 1, 1 },   // Diagonal down-right
-		// 	new int[] { -1, 1 }   // Diagonal down-left
-		// };
 		foreach (var (dx, dy) in directions)
 		{
 			FlipInDirection(positionFlip, dx, dy, currentPlayerColor, enemyColor, allDisc, boardLength);
