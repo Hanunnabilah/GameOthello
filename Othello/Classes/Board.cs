@@ -20,10 +20,10 @@ public class Board
 				idDisc++;
 			}
 		}
-		// set position in center board
+		// Set position in center board
 		int mid = _discs.GetLength(0) / 2;
 
-		// set 4 discs for first place on board
+		// Set 4 discs for first place on board
 		_discs[mid - 1, mid - 1].piece = Piece.White;
 		_discs[mid - 1, mid].piece = Piece.Black;
 		_discs[mid, mid - 1].piece = Piece.Black;
@@ -31,7 +31,6 @@ public class Board
 	}
 
 	public void SetDisc(int x, int y, Piece piece)
-	// set disc sesuai dengan color pada argumen atau pparamter
 	{
 		_discs[x,y].piece = piece; 
 	}
