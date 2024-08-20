@@ -36,7 +36,7 @@ public class GameController
 		return PossibleMove();
 	}
 	// ganti return type
-	public void NextTurn()
+	public bool NextTurn()
 	{
 		// get current player by index in list players
 		if (_CurrentPlayerIndex == 0)
@@ -47,11 +47,13 @@ public class GameController
 		{
 			_CurrentPlayerIndex = 0;
 		}
+		return true;
 	}
 	// ganti return type	
-	public void EndTurn()
+	public bool EndTurn()
 	{
 		Disc[,] getAllDisc = _board.GetAllDisc();
+		bool hintsCleared = false;
 
 		for (int y = 0; y < getAllDisc.GetLength(1); y++)
 		{
@@ -60,9 +62,11 @@ public class GameController
 				if (getAllDisc[x, y].piece == Piece.Hint)
 				{
 					_board.SetDisc(x, y, Piece.Empty);
+					hintsCleared = true;
 				}
 			}
 		}
+		return hintsCleared;
 	}
 	// ganti return type	
 	public bool PassTurn()
@@ -96,7 +100,6 @@ public class GameController
 			return false;
 		}
 	}
-
 	public bool PossibleMove()
 	{
 		bool PossibleMoveExist = false;
