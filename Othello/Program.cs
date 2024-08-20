@@ -174,13 +174,14 @@ class Program
 	public static void DisplayCountDisc(GameController controller, IPlayer player1, IPlayer player2)
 	{
 		var playerColors = InitializePlayerColors(player1, player2);
-		var discCounts = controller.CountDisc(playerColors);
+
+		// Menghitung disk untuk masing-masing pemain berdasarkan warna disk
+		int countPlayer1Discs = controller.CountDisc(playerColors[player1].piece);
+		int countPlayer2Discs = controller.CountDisc(playerColors[player2].piece);
 
 		// Menampilkan hasil disk setelah permainan selesai
 		Console.WriteLine("DISC COUNTS :");
-		foreach (var count in discCounts)
-		{
-			Console.WriteLine($"{count.Key.Username} HAS {count.Value} DISCS.");
-		}
+		Console.WriteLine($"{player1.Username} HAS {countPlayer1Discs} DISCS.");
+		Console.WriteLine($"{player2.Username} HAS {countPlayer2Discs} DISCS.");
 	}
 }
