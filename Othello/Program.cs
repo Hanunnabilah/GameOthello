@@ -134,7 +134,6 @@ class Program
 			int y = int.Parse(Console.ReadLine());
 
 			Position inputPlayerCoord = new Position(x, y);
-			// bool isValidMove = positionHints.Any(hint => hint.x == inputPlayerCoord.x && hint.y == inputPlayerCoord.y);
 			foreach(Position hint in positionHints)
 			{
 				if(inputPlayerCoord.x == hint.x && inputPlayerCoord.y == hint.y)
@@ -175,11 +174,10 @@ class Program
 	{
 		var playerColors = InitializePlayerColors(player1, player2);
 
-		// Menghitung disk untuk masing-masing pemain berdasarkan warna disk
+		// Counting the discs for each player based on the disc color
 		int countPlayer1Discs = controller.CountDisc(playerColors[player1].piece);
 		int countPlayer2Discs = controller.CountDisc(playerColors[player2].piece);
 
-		// Menampilkan hasil disk setelah permainan selesai
 		Console.WriteLine("DISC COUNTS :");
 		Console.WriteLine($"{player1.Username} HAS {countPlayer1Discs} DISCS.");
 		Console.WriteLine($"{player2.Username} HAS {countPlayer2Discs} DISCS.");
