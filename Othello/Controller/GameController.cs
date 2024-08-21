@@ -79,28 +79,28 @@ public class GameController
 		}
 		return possibleMoves.Any();
 	}
-	public void MakeMove(Position positionMove)
+	public bool MakeMove(Position positionMove)
 	{
 		IPlayer currentPlayer = players[_CurrentPlayerIndex];
 		Piece currentPlayerColor = _playerColors[currentPlayer].piece;
 
-		// if (IsValidMove(positionMove, currentPlayerColor))
-		// {
+		if (IsValidMove(positionMove, currentPlayerColor))
+		{
 			_board.SetDisc(positionMove.x, positionMove.y, currentPlayerColor);
-			// FlipDisc(positionMove);
-		// 	// _log.Info($"Move executed at position ({positionMove.x}, {positionMove.y}) by player with color {currentPlayerColor}");
-		// 	return true; 
-		// }
-		// else
-		// {
-		// 	// _log.Warn($"Move failed at position ({positionMove.x}, {positionMove.y}) by player with color {currentPlayerColor}");
-		// 	return false;
-		// }
+			FlipDisc(positionMove);
+			// _log.Info($"Move executed at position ({positionMove.x}, {positionMove.y}) by player with color {currentPlayerColor}");
+			return true; 
 		}
-	// private bool IsValidMove(Position position, Piece color)
-	// {
-	// 	return CheckPossibleMove(position, _board.GetAllDisc(), color);
-	// }
+		else
+		{
+			// _log.Warn($"Move failed at position ({positionMove.x}, {positionMove.y}) by player with color {currentPlayerColor}");
+			return false;
+		}
+		}
+	private bool IsValidMove(Position position, Piece color)
+	{
+		return CheckPossibleMove(position, _board.GetAllDisc(), color);
+	}
 	public bool PossibleMove()
 	{
 		bool PossibleMoveExist = false;
